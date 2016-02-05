@@ -1,10 +1,10 @@
 # Prelude, Cello Suite No. 1 in G Major (BMV 1007)
 # J.S. Bach
 
-(tempo! 60)
-(quant! 99)
+cello "main":
+  (tempo! 60)
+  (quant! 99)
 
-cello "main":  
   o2 g16 > d b a b d b d < g > d b a b d b d
   o2 g > e > c < b > c < e > c < e < g > e > c < b > c < e > c < e
   o2 g > f+ > c < b > c < f+ > c < f+ < g > f+ > c < b > c < f+ > c < f+
@@ -16,7 +16,7 @@ cello "main":
   o2 e > c+ d e d c+ < b a > g f+ e > d c+ < b a g
   o3 f+ e d > d < a > d < f+ a d e f+ a g f+ e d
   o3 g+ d f e f d g+ d b d f e f d g+ d
-  o3 c e a b > c < a e d c e a b > c < a f+ e 
+  o3 c e a b > c < a e d c e a b > c < a f+ e
   o3 d+ f+ d+ f+ a f+ a f+ d+ f+ d+ f+ a f+ a f+
   o3 g f+ e g f+ g a f+ g f+ e d c < b a g
   o2 f+ > c d c d c d c < f+ > c d c d c d c
@@ -26,7 +26,7 @@ cello "main":
   o2 g > d b a b g f+ e d c < b a g f+ e d
   o2 c+ a > e f+ g e f+ g < c+ a > e f+ g e f+ g
   o2 c a > d e f+ d e f+ < c a > d e f+ d e f+
-  o2 c a > d f+ b > c+ d8~4~8 r16 # fake fermata and breath :) 
+  o2 c a > d f+ b > c+ d8~4~8 r16 # fake fermata and breath :)
                                   << a b > c d e f+ g
   o3 a f+ d e f+ g a b > c < a f+ g a b > c d
   o4 e- d c+ d d c < b > c c < a f+ e d < a b > c
