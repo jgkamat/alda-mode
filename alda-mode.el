@@ -15,6 +15,8 @@
     (alda-bar-regexp "\\(|\\)")
     (alda-set-octave-regexp "\\(o[0-9]+\\)")
     (alda-shift-octave-regexp "\\(>\\|<\\)")
+    (alda-variable-regexp "\\((\\(\\(quant\\(ization\\)?\\)\\|\\(tempo\\)\\|\\(vol\\(ume\\)?\\)\\)!?\s+[0-9]+)\\)")
+    (alda-markers-regexp "\\([@%][a-zA-Z]\\{2\\}[a-zA-Z0-9()+-]*\\)")
     )
 
   (setq alda-highlights
@@ -23,9 +25,11 @@
        (,alda-voice-regexp . (1 font-lock-function-name-face))
        (,alda-instrument-regexp . (1 font-lock-function-name-face))
        (,alda-string-regexp . (1 font-lock-string-face))
+       (,alda-variable-regexp . (1 font-lock-variable-name-face))
        (,alda-set-octave-regexp . (1 font-lock-type-face))
        (,alda-shift-octave-regexp . (1 font-lock-type-face))
        (,alda-timing-regexp . (1 font-lock-builtin-face))
+       (,alda-markers-regexp . (1 font-lock-builtin-face))
        (,alda-pitch-shift . (1 font-lock-preprocessor-face))
        )))
 
