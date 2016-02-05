@@ -10,7 +10,7 @@
     (alda-instrument-regexp "\\([a-zA-Z]\\{2\\}[A-Za-z0-9_\-]*\\)\\(\s+\\(\"[A-Za-z0-9_\-]*\"\\)\\)?:")
     (alda-voice-regexp "\\([Vv][0-9]+\\):")
     (alda-string-regexp "“\\([^ ]+?\\)”")
-    (alda-timing-regexp "[a-gr]\s*\\([~.0-9/]*\\)")
+    (alda-timing-regexp "[a-gr][\s+-]*\\([~.0-9\s/]*\\)")
     (alda-pitch-shift "[a-gr]\s*\\([-+]+\\)")
     (alda-bar-regexp "\\(|\\)")
     (alda-set-octave-regexp "\\(o[0-9]+\\)")
@@ -35,6 +35,7 @@
 
 (define-derived-mode alda-mode fundamental-mode
   ;; Set alda comments
+
   (setq-local comment-start "# ")
   (setq-local comment-end "")
 
