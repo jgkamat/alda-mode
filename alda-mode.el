@@ -79,12 +79,12 @@ Because alda runs in the background, the only way to do this is with alda restar
 (let
   ;; Prevent regexes from taking up memory
   ((alda-comment-regexp "\\(#.*$\\)")
-    (alda-instrument-regexp "\\([a-zA-Z]\\{2\\}[A-Za-z0-9_\-]*\\)\\(\s+\\(\"[A-Za-z0-9_\-]*\"\\)\\)?:")
+    (alda-instrument-regexp "\\([a-zA-Z]\\{2\\}[A-Za-z0-9_\-]*\\)\\(\s*\\(\"[A-Za-z0-9_\-]*\"\\)\\)?:")
     (alda-voice-regexp "\\([Vv][0-9]+\\):")
     (alda-string-regexp "“\\([^ ]+?\\)”")
-    (alda-timing-regexp "[a-gr][\s+-]*\\([~.0-9\s/]*\\(m?s\\)?\\)")
+    (alda-timing-regexp "[a-gA-GrR][\s+-]*\\([~.0-9\s/]*\\(m?s\\)?\\)")
     (alda-cramming-regexp "\\({\\|}\\)")
-    (alda-accidental-regexp "\\([a-gr]\s*[-+]+\\)")
+    (alda-accidental-regexp "\\([a-gA-GrR]\s*[-+]+\\)")
     (alda-bar-regexp "\\(|\\)")
     (alda-set-octave-regexp "\\(o[0-9]+\\)")
     (alda-shift-octave-regexp "\\(>\\|<\\)")
