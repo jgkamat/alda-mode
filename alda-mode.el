@@ -32,11 +32,9 @@
 (defconst +alda-output-buffer+ "*alda-output*")
 (defconst +alda-output-name+ "alda-playback")
 
-(defun alda-play-region (start end)
-  "Plays the current selection in alda.
-Argument START The start of the selection to play from.
-Argument END The end of the selection to play from."
-  (interactive "r")
+(defun alda-play-text (text)
+  "Plays the given text using alda play --code
+Argument TEXT the text to play from"
   ;; Append an infinite loop if we will start a server
   (let ((process-loop-str
           (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string "alda status"))
@@ -48,9 +46,28 @@ Argument END The end of the selection to play from."
         (message "No mark was set!")
         (progn
           (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-            (concat "alda play --code '" (buffer-substring-no-properties start end)
+            (concat "alda play --code '" text
               ;; Infinite loop when server is down, prevents emacs from killing the alda server.
               "'" process-loop-str)))))))
+
+(defun alda-play-region (start end)
+  "Plays the current selection in alda.
+Argument START The start of the selection to play from.
+Argument END The end of the selection to play from."
+  (interactive "r")
+  (alda-play-text (buffer-substring-no-properties start end)))
+
+;; If evil is found, make evil commands as well.
+(require 'evil-common)
+(when (featurep 'evil)
+  (evil-define-operator alda-evil-play-region (beg end type register yank-hanlder)
+    "Plays the text from BEG to END"
+    :move-point nil
+    :repeat nil
+    (interactive "<R><x><y>")
+    (alda-play-region beg end)))
+
+
 
 (defun alda-stop ()
   "Stops songs from playing, and cleans up idle alda runner processes.
