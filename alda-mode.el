@@ -66,12 +66,13 @@ Because alda runs in the background, the only way to do this is with alda restar
     (alda-instrument-regexp "\\([a-zA-Z]\\{2\\}[A-Za-z0-9_\-]*\\)\\(\s+\\(\"[A-Za-z0-9_\-]*\"\\)\\)?:")
     (alda-voice-regexp "\\([Vv][0-9]+\\):")
     (alda-string-regexp "“\\([^ ]+?\\)”")
-    (alda-timing-regexp "[a-gr][\s+-]*\\([~.0-9\s/]*\\)")
+    (alda-timing-regexp "[a-gr][\s+-]*\\([~.0-9\s/]*\\(m?s\\)?\\)")
+    (alda-cramming-regexp "\\({\\|}\\)")
     (alda-accidental-regexp "\\([a-gr]\s*[-+]+\\)")
     (alda-bar-regexp "\\(|\\)")
     (alda-set-octave-regexp "\\(o[0-9]+\\)")
     (alda-shift-octave-regexp "\\(>\\|<\\)")
-    (alda-variable-regexp "\\((\\(\\(quant\\(ization\\)?\\)\\|\\(tempo\\)\\|\\(vol\\(ume\\)?\\)\\)!?\s+[0-9]+)\\)")
+    (alda-variable-regexp "\\(([a-zA-Z-]+!?\s+\\(\\([0-9]+\\)\\|\\(\\[\\(:[a-zA-Z]+\s?\\)+\\]\\)\\))\\)")
     (alda-markers-regexp "\\([@%][a-zA-Z]\\{2\\}[a-zA-Z0-9()+-]*\\)"))
 
   (defvar alda-highlights
@@ -84,6 +85,7 @@ Because alda runs in the background, the only way to do this is with alda restar
        (,alda-set-octave-regexp . (1 font-lock-constant-face))
        (,alda-shift-octave-regexp . (1 font-lock-constant-face))
        (,alda-timing-regexp . (1 font-lock-builtin-face))
+       (,alda-cramming-regexp . (1 font-lock-builtin-face))
        (,alda-markers-regexp . (1 font-lock-builtin-face))
        (,alda-accidental-regexp . (1 font-lock-preprocessor-face))
        )))
