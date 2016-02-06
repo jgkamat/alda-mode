@@ -1,12 +1,38 @@
 
-;;;; alda-mode for emacs. A simple major mode that provides language features for alda
+;;; alda-mode.el --- A simple major mode that provides language features for the musical programming language, Alda
+
+;; Copyright (C) 2016 Jay Kamat
+;; Author: Jay Kamat <github@jgkamat.33mail.com>
+;; Version: 0.1
+;; Keywords: alda, highlight
+;; URL: http://github.com/jgkamat/alda-mode
+;; Package-Requires: ((emacs "23.0"))
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+;; This package provides syntax highlighting and basic alda integration.
+;; Activate font-lock-mode to use the syntax features, and run 'alda-play-region' to play song files
+
+;;; Code:
 
 (require 'asm-mode)
 
 (defconst alda-output-buffer "*alda-output*")
 (defconst alda-output-name "alda-playback")
 
-(defun alda-play-reigion (start end)
+(defun alda-play-region (start end)
   "Plays the current selection in alda"
   (interactive "r")
   (if (eq (length (shell-command-to-string "which alda")) 0)
@@ -19,6 +45,7 @@
             ;; Infinite loop, prevents emacs from killing the alda server.
             ;; TODO: make this happen only when running the server.
             "' &&  while true; do; sleep 1; done"))))))
+
 (defun alda-stop ()
   "Stops songs from playing, and cleans up idle alda runner processes
 Because alda runs in the background, the only way to do this is with alda restart as of now."
@@ -42,7 +69,7 @@ Because alda runs in the background, the only way to do this is with alda restar
     (alda-markers-regexp "\\([@%][a-zA-Z]\\{2\\}[a-zA-Z0-9()+-]*\\)")
     )
 
-  (setq alda-highlights
+  (defvar alda-highlights
     `((,alda-comment-regexp . (1 font-lock-comment-face) )
        (,alda-bar-regexp . (1 font-lock-comment-face))
        (,alda-voice-regexp . (1 font-lock-function-name-face))
