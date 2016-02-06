@@ -58,7 +58,6 @@ Argument END The end of the selection to play from."
   (alda-play-text (buffer-substring-no-properties start end)))
 
 ;; If evil is found, make evil commands as well.
-(require 'evil-common)
 (when (featurep 'evil)
   (evil-define-operator alda-evil-play-region (beg end type register yank-hanlder)
     "Plays the text from BEG to END"
