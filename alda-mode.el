@@ -90,19 +90,23 @@ Because alda runs in the background, the only way to do this is with alda restar
        (,alda-accidental-regexp . (1 font-lock-preprocessor-face))
        )))
 
+;;;###autoload
 (define-derived-mode alda-mode fundamental-mode
+  "Alda"
+  "A major mode for alda-lang, providing syntax highlighting and basic indention."
+
   ;; Set alda comments
+  (setq comment-start "# ")
+  (setq comment-end "")
 
-  (setq-local comment-start "# ")
-  (setq-local comment-end "")
-
-  (setq-local indent-line-function 'asm-indent-line)
+  (setq indent-line-function 'asm-indent-line)
 
   ;; Set alda highlighting
   (setq font-lock-defaults '(alda-highlights))
   (setq mode-name "Alda"))
 
 ;; Open alda files in alda-mode
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.alda\\'" . alda-mode))
 
 (provide 'alda-mode)
