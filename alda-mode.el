@@ -118,8 +118,7 @@ Because alda runs in the background, the only way to do this is with alda restar
   (setq indent-line-function 'asm-indent-line)
 
   ;; Set alda highlighting
-  (setq font-lock-defaults '(alda-highlights))
-  (setq mode-name "Alda"))
+  (setq font-lock-defaults '(alda-highlights)))
 
 ;; Open alda files in alda-mode
 ;;;###autoload
