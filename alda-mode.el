@@ -1,4 +1,3 @@
-
 ;;; alda-mode.el --- A simple major mode that provides language features for the musical programming language, Alda
 
 ;; Copyright (C) 2016 Jay Kamat
@@ -6,7 +5,7 @@
 ;; Version: 0.1
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
-;; Package-Requires: ((emacs "23.0"))
+;; Package-Requires: ((emacs "24.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,7 +33,9 @@
 (defconst +alda-output-name+ "alda-playback")
 
 (defun alda-play-region (start end)
-  "Plays the current selection in alda"
+  "Plays the current selection in alda.
+Argument START The start of the selection to play from.
+Argument END The end of the selection to play from."
   (interactive "r")
   ;; Append an infinite loop if we will start a server
   (let ((process-loop-str
@@ -52,7 +53,7 @@
               "'" process-loop-str)))))))
 
 (defun alda-stop ()
-  "Stops songs from playing, and cleans up idle alda runner processes
+  "Stops songs from playing, and cleans up idle alda runner processes.
 Because alda runs in the background, the only way to do this is with alda restart as of now."
   (interactive)
   (shell-command "alda stop -y")
