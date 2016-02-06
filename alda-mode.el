@@ -1,4 +1,4 @@
-;;; alda-mode.el --- A simple major mode that provides language features for the musical programming language, Alda
+;;; alda-mode.el --- A simple major mode for the musical programming language Alda
 
 ;; Copyright (C) 2016 Jay Kamat
 ;; Author: Jay Kamat <github@jgkamat.33mail.com>
