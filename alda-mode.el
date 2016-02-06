@@ -99,3 +99,5 @@ Because alda runs in the background, the only way to do this is with alda restar
 (add-to-list 'auto-mode-alist '("\\.alda\\'" . alda-mode))
 
 (provide 'alda-mode)
+
+;;; alda-mode.el ends here
