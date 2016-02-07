@@ -1,4 +1,4 @@
-;;; alda-mode.el --- A simple major mode that provides language features for the musical programming language, Alda
+;;; alda-mode.el --- A simple major mode for the musical programming language Alda
 
 ;; Copyright (C) 2016 Jay Kamat
 ;; Author: Jay Kamat <github@jgkamat.33mail.com>
@@ -194,8 +194,7 @@ Because alda runs in the background, the only way to do this is with alda restar
   (setq indent-line-function 'alda-indent-line)
 
   ;; Set alda highlighting
-  (setq font-lock-defaults '(alda-highlights))
-  (setq mode-name "Alda"))
+  (setq font-lock-defaults '(alda-highlights)))
 
 
 
