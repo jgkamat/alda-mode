@@ -26,11 +26,11 @@
 
 ;;; Code:
 
-;; asm mode's indention is used for alda.
-(require 'asm-mode)
-
 (defconst +alda-output-buffer+ "*alda-output*")
 (defconst +alda-output-name+ "alda-playback")
+(defconst +alda-comment-str+ "#")
+
+;;; Region playback functions
 
 (defun alda-play-text (text)
   "Plays the given text using alda play --code
@@ -65,8 +65,6 @@ Argument END The end of the selection to play from."
     :repeat nil
     (interactive "<R><x><y>")
     (alda-play-region beg end)))
-
-
 
 (defun alda-stop ()
   "Stops songs from playing, and cleans up idle alda runner processes.
@@ -106,20 +104,100 @@ Because alda runs in the background, the only way to do this is with alda restar
        (,alda-accidental-regexp . (1 font-lock-preprocessor-face))
        )))
 
+;;; Indention code
+;;;
+;;; A duplicate of asm-mode.el with changes
+
+(defun alda-indent-line ()
+  "Auto-indent the current line."
+  (interactive)
+  (let* ((savep (point))
+	 (indent (condition-case nil
+		     (save-excursion
+		       (forward-line 0)
+		       (skip-chars-forward " \t")
+		       (if (>= (point) savep) (setq savep nil))
+		       (max (alda-calculate-indentation) 0))
+		   (error 0))))
+    (if savep
+	(save-excursion (indent-line-to indent))
+      (indent-line-to indent))))
+
+(defun indent-prev-level ()
+  "Indents this line to the indention level of the previous non-whitespace line"
+  (save-excursion
+    (forward-line -1)
+    (while (and
+             (not (eq (point) (point-min))) ;; Point at start of bufffer
+             ;; Point has a empty line
+             (let ((match-str (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+               (or (string-match "^\\s-*$" match-str)) (eq 0 (length match-str))))
+      (forward-line -1))
+    (current-indentation)))
+
+
+(defun alda-calculate-indentation ()
+  (or
+    ;; Flush labels to the left margin.
+    (and (looking-at "[A-Za-z0-9\" -]+:\\s-*$") 0)
+    ;; All comments indention are the previous line's indention.
+    (and (looking-at +alda-comment-str+) (indent-prev-level))
+    ;; The rest goes at the first tab stop.
+    (or (indent-next-tab-stop 0))))
+
+(defun alda-colon ()
+  "Insert a colon; if it follows a label, delete the label's indentation."
+  (interactive)
+  (let ((labelp nil))
+    (save-excursion
+      (skip-chars-backward "A-Za-z\"\s")
+      (skip-chars-backward " ")
+      (if (setq labelp (bolp)) (delete-horizontal-space)))
+    (call-interactively 'self-insert-command)
+    (when labelp
+      (delete-horizontal-space)
+      (tab-to-tab-stop))))
+
+;;; Alda keymaps.
+;; TODO determine standard keymap for alda-mode
+
+(defvar alda-mode-map nil "Keymap for alda-mode")
+(when (not alda-mode-map) ; if it is not already defined
+
+  ;; assign command to keys
+  (setq alda-mode-map (make-sparse-keymap))
+  (define-key alda-mode-map (kbd ":") 'alda-colon)
+
+  (define-key alda-mode-map [menu-bar alda-mode] (cons "Alda" (make-sparse-keymap)))
+  (define-key alda-mode-map [menu-bar alda-mode alda-colon]
+    '(menu-item "Insert Colon" alda-colon
+       :help "Insert a colon; if it follows a label, delete the label's indentation")))
+
+
+;;; Alda mode definition
+
 ;;;###autoload
-(define-derived-mode alda-mode fundamental-mode
+(define-derived-mode alda-mode prog-mode
   "Alda"
   "A major mode for alda-lang, providing syntax highlighting and basic indention."
 
   ;; Set alda comments
-  (setq comment-start "# ")
-  (setq comment-end "")
+  (setq comment-start +alda-comment-str+)
+  (setq comment-padding " ")
+  (setq comment-start-skip (concat +alda-comment-str+ "\\s-*"))
+  (setq comment-multi-line (concat +alda-comment-str+ " "))
+  ;; Comments should use the indention of the last line
+  (setq comment-indent-function #'indent-prev-level)
 
-  (setq indent-line-function 'asm-indent-line)
+  ;; Set custom mappings
+  (use-local-map alda-mode-map)
+  (setq indent-line-function 'alda-indent-line)
 
   ;; Set alda highlighting
   (setq font-lock-defaults '(alda-highlights))
   (setq mode-name "Alda"))
+
+
 
 ;; Open alda files in alda-mode
 ;;;###autoload
