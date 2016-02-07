@@ -33,7 +33,7 @@
 ;;; Region playback functions
 
 (defun alda-play-text (text)
-  "Plays the given text using alda play --code
+  "Plays the given text using alda play --code.
 Argument TEXT the text to play from"
   ;; Append an infinite loop if we will start a server
   (let ((process-loop-str
@@ -124,7 +124,7 @@ Because alda runs in the background, the only way to do this is with alda restar
       (indent-line-to indent))))
 
 (defun indent-prev-level ()
-  "Indents this line to the indention level of the previous non-whitespace line"
+  "Indent this line to the indention level of the previous non-whitespace line."
   (save-excursion
     (forward-line -1)
     (while (and
@@ -137,6 +137,7 @@ Because alda runs in the background, the only way to do this is with alda restar
 
 
 (defun alda-calculate-indentation ()
+  "Calculates indentation for `alda-mode' code."
   (or
     ;; Flush labels to the left margin.
     (and (looking-at "[A-Za-z0-9\" -]+:\\s-*$") 0)
@@ -161,7 +162,7 @@ Because alda runs in the background, the only way to do this is with alda restar
 ;;; Alda keymaps.
 ;; TODO determine standard keymap for alda-mode
 
-(defvar alda-mode-map nil "Keymap for alda-mode")
+(defvar alda-mode-map nil "Keymap for `alda-mode'.")
 (when (not alda-mode-map) ; if it is not already defined
 
   ;; assign command to keys
