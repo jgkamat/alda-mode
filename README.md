@@ -1,4 +1,4 @@
-# Alda Mode
+# Alda Mode [![MELPA](http://melpa.org/packages/alda-mode-badge.svg)](http://melpa.org/#/alda-mode)
 
 The best way to edit your [alda](https://github.com/alda-lang/alda) files in Emacs!
 
