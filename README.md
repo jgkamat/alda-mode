@@ -6,11 +6,11 @@ Alda mode is a simple mode to provide syntax highlighting and other basic langua
 
 ## Installation
 
-The easiest way to install alda-mode is through [melpa](http://melpa.org/#/getting-started). Simply `M-x package-install` `melpa`.
+The easiest way to install alda-mode is through [melpa](http://melpa.org/#/getting-started). Simply `M-x package-install` `alda-mode`.
 
 Once installed, place `(require 'alda-mode)` in your init.el.
 
-For evil integration, [require evil before alda](https://github.com/jgkamat/alda-mode#evil-integration).
+For evil integration, [simply require evil as well](https://github.com/jgkamat/alda-mode#evil-integration).
 
 Alda files (`.alda` extension) should now have syntax highlighting via font-lock-mode when opened.
 
@@ -30,14 +30,14 @@ Please submit any bugs with this feature as issues to this repository.
 
 ## Evil Integration
 
-Evil integration is automatically applied if you require evil before alda-mode:
+Evil integration is automatically applied if you require evil somewhere in your init as well.
 
 ```
 (require 'evil)
 (require 'alda-mode)
 ```
 
-This will make a evil operator called `alda-evil-play-region`.
+This will make a evil operator called `alda-evil-play-region`, defined when you require evil.
 
 ## Keybindings
 
