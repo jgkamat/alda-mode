@@ -1,22 +1,32 @@
 # Alda Mode
 
-An [Alda](https://github.com/alda-lang/alda) Major Mode for Emacs
+The best way to edit your [alda](https://github.com/alda-lang/alda) files in Emacs!
 
-Alda mode is a simple mode to provide syntax highlighting and other basic language features for [Alda, the music programming language](https://github.com/alda-lang/alda) written in Clojure!
+Alda mode is a simple mode to provide syntax highlighting and other basic language features for [Alda, the music programming language](https://github.com/alda-lang/alda) written in Clojure.
 
 ## Installation
 
-Simply place `(require 'alda-mode)` in your init.el and load `alda-mode.el`.
+The easiest way to install alda-mode is through [melpa](http://melpa.org/#/getting-started). Simply `M-x package-install` `melpa`.
+
+Once installed, place `(require 'alda-mode)` in your init.el.
+
+For evil integration, [require evil before alda](https://github.com/jgkamat/alda-mode#evil-integration).
 
 Alda files (`.alda` extension) should now have syntax highlighting via font-lock-mode when opened.
 
+If melpa won't work for you, `M-x package-install-file` alda-mode.el from this repository instead.
+
 ## Usage
 
-alda-mode can play segments of alda from within emacs! Simply highlight a section of alda code and run
+alda-mode can play segments of alda from within Emacs! Simply highlight a section of alda code and run:
 
 `M-x alda-play-region`
 
-Keep in mind, the server will only see the selection you make, and this has consequences. For example, you must run a snippet of code defining an instrument before you hear anything (or defining a marker before using it). `alda-play-region` will use a running alda server if it finds one, but will start one within emacs if not found. Support is currently only available for Linux/Mac for this command.
+This will take a while during the first call, which will start the alda server within Emacs (if not already on your system). `alda` will need to be on your path.
+
+Keep in mind, the server will only see the selection you make, and this has consequences. For example, you must run a snippet of code defining an instrument before you hear anything (or defining a marker before using it). `alda-play-region` will use a running alda server if it finds one, but will start one within Emacs if not found. Support is currently only available for Linux/Mac for this command.
+
+Please submit any bugs with this feature as issues to this repository.
 
 ## Evil Integration
 
@@ -48,4 +58,4 @@ If you find a bug or want to improve alda-mode, submit a PR! =)
 
 ## License
 
-alda-mode is licensed under the GPLv3
+alda-mode is licensed under the GPLv3.
