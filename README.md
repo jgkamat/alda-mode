@@ -10,7 +10,7 @@ The easiest way to install alda-mode is through [melpa](http://melpa.org/#/getti
 
 Once installed, place `(require 'alda-mode)` in your init.el.
 
-For evil integration, [simply require evil as well](https://github.com/jgkamat/alda-mode#evil-integration).
+For evil integration, [simply install evil before alda-mode](https://github.com/jgkamat/alda-mode#evil-integration).
 
 Alda files (`.alda` extension) should now have syntax highlighting via font-lock-mode when opened.
 
@@ -30,14 +30,14 @@ Please submit any bugs with this feature as issues to this repository.
 
 ## Evil Integration
 
-Evil integration is automatically applied if you require evil somewhere in your init as well.
+Evil integration is automatically applied if you install evil before alda-mode. If you are installing evil after alda-mode, please reinstall/recompile alda-mode.
 
 ```
 (require 'evil)
 (require 'alda-mode)
 ```
 
-This will make a evil operator called `alda-evil-play-region`, defined when you require evil.
+This will make a evil operator called `alda-evil-play-region`, defined when you require evil. If evil was not installed, this is replaced with a warning message.
 
 ## Keybindings
 

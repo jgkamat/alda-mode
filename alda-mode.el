@@ -63,8 +63,10 @@ Argument END The end of the selection to play from."
   (unless (require 'evil nil 'noerror)
     ;; Evil must be sourced in order to define this macro
     (defmacro evil-define-operator (name &rest trash)
+      ;; Define a dummy instead if not present.
       `(defun ,name () (interactive) (message "Evil was not present while compiling alda-mode. Recompile with evil installed!")))))
 
+;; Macro will be expanded based on the above dummy/evil load
 (evil-define-operator alda-evil-play-region (beg end type register yank-hanlder)
   "Plays the text from BEG to END"
   :move-point nil
