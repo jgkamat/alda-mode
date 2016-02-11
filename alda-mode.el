@@ -42,29 +42,35 @@ Argument TEXT the text to play from"
             "")))
     (if (eq (length (shell-command-to-string "which alda")) 0)
       (message "Alda was not found on your $PATH.")
-      (if (eq start end)
-        (message "No mark was set!")
-        (progn
-          (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-            (concat "alda play --code '" text
-              ;; Infinite loop when server is down, prevents emacs from killing the alda server.
-              "'" process-loop-str)))))))
+      (progn
+        (start-process-shell-command +alda-output-name+ +alda-output-buffer+
+          (concat "alda play --code '" text
+            ;; Infinite loop when server is down, prevents emacs from killing the alda server.
+            "'" process-loop-str))))))
 
 (defun alda-play-region (start end)
   "Plays the current selection in alda.
 Argument START The start of the selection to play from.
 Argument END The end of the selection to play from."
   (interactive "r")
-  (alda-play-text (buffer-substring-no-properties start end)))
+
+  (if (eq start end)
+    (message "No mark was set!")
+    (alda-play-text (buffer-substring-no-properties start end))))
 
 ;; If evil is found, make evil commands as well.
-(eval-after-load 'evil
-  '(evil-define-operator alda-evil-play-region (beg end type register yank-hanlder)
-    "Plays the text from BEG to END"
-    :move-point nil
-    :repeat nil
-    (interactive "<R><x><y>")
-    (alda-play-region beg end)))
+(eval-when-compile
+  (unless (require 'evil nil 'noerror)
+    ;; Evil must be sourced in order to define this macro
+    (defmacro evil-define-operator (&rest trash)
+      '(message "Evil was not present while compiling alda-mode. Recompile with evil installed!"))))
+
+(evil-define-operator alda-evil-play-region (beg end type register yank-hanlder)
+  "Plays the text from BEG to END"
+  :move-point nil
+  :repeat nil
+  (interactive "<R><x><y>")
+  (alda-play-region beg end))
 
 (defun alda-stop ()
   "Stops songs from playing, and cleans up idle alda runner processes.
@@ -112,15 +118,15 @@ Because alda runs in the background, the only way to do this is with alda restar
   "Auto-indent the current line."
   (interactive)
   (let* ((savep (point))
-	 (indent (condition-case nil
-		     (save-excursion
-		       (forward-line 0)
-		       (skip-chars-forward " \t")
-		       (if (>= (point) savep) (setq savep nil))
-		       (max (alda-calculate-indentation) 0))
-		   (error 0))))
+          (indent (condition-case nil
+                    (save-excursion
+                      (forward-line 0)
+                      (skip-chars-forward " \t")
+                      (if (>= (point) savep) (setq savep nil))
+                      (max (alda-calculate-indentation) 0))
+                    (error 0))))
     (if savep
-	(save-excursion (indent-line-to indent))
+      (save-excursion (indent-line-to indent))
       (indent-line-to indent))))
 
 (defun indent-prev-level ()
