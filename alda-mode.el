@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016 Jay Kamat
 ;; Author: Jay Kamat <github@jgkamat.33mail.com>
-;; Version: 0.1
+;; Version: 0.2
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
 ;; Package-Requires: ((emacs "24.0"))
@@ -24,13 +24,15 @@
 ;; This package provides syntax highlighting and basic alda integration.
 ;; Activate font-lock-mode to use the syntax features, and run 'alda-play-region' to play song files
 
-;;; Code:
+;;; Constants:
 
 (defconst +alda-output-buffer+ "*alda-output*")
 (defconst +alda-output-name+ "alda-playback")
 (defconst +alda-comment-str+ "#")
 
-;;; Region playback functions
+;;; Code:
+
+;;; -- Region playback functions --
 
 (defun alda-play-text (text)
   "Plays the given text using alda play --code.
@@ -81,7 +83,7 @@ Because alda runs in the background, the only way to do this is with alda restar
   (shell-command "alda stop -y")
   (delete-process +alda-output-buffer+))
 
-;;; Regexes
+;;; -- Font Lock Regexes --
 (let
   ;; Prevent regexes from taking up memory
   ((alda-comment-regexp "\\(#.*$\\)")
@@ -109,13 +111,12 @@ Because alda runs in the background, the only way to do this is with alda restar
        (,alda-timing-regexp . (1 font-lock-builtin-face))
        (,alda-cramming-regexp . (1 font-lock-builtin-face))
        (,alda-markers-regexp . (1 font-lock-builtin-face))
-       (,alda-accidental-regexp . (1 font-lock-preprocessor-face))
-       )))
+       (,alda-accidental-regexp . (1 font-lock-preprocessor-face)))))
 
-;;; Indention code
-;;;
-;;; A duplicate of asm-mode.el with changes
+;;; -- Indention code --
 
+;; A duplicate of asm-mode.el with changes
+;; changes were made to the naming convention and to how the labels are calculated.
 (defun alda-indent-line ()
   "Auto-indent the current line."
   (interactive)
@@ -167,7 +168,7 @@ Because alda runs in the background, the only way to do this is with alda restar
       (delete-horizontal-space)
       (tab-to-tab-stop))))
 
-;;; Alda keymaps.
+;;; -- Alda Keymaps --
 ;; TODO determine standard keymap for alda-mode
 
 (defvar alda-mode-map nil "Keymap for `alda-mode'.")
@@ -183,7 +184,7 @@ Because alda runs in the background, the only way to do this is with alda restar
        :help "Insert a colon; if it follows a label, delete the label's indentation")))
 
 
-;;; Alda mode definition
+;;; -- Alda Mode Definition --
 
 ;;;###autoload
 (define-derived-mode alda-mode prog-mode
