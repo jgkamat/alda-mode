@@ -160,8 +160,7 @@ Because alda runs in the background, the only way to do this is with alda restar
   (interactive)
   (let ((labelp nil))
     (save-excursion
-      (skip-chars-backward "A-Za-z\"\s")
-      (skip-chars-backward " ")
+      (skip-chars-backward "A-Za-z\"\s\t")
       (if (setq labelp (bolp)) (delete-horizontal-space)))
     (call-interactively 'self-insert-command)
     (when labelp
