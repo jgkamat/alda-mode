@@ -54,6 +54,7 @@ Argument TEXT the text to play from"
   "Plays the current selection in alda.
 Argument START The start of the selection to play from.
 Argument END The end of the selection to play from."
+
   (interactive "r")
 
   (if (eq start end)
@@ -91,7 +92,9 @@ Because alda runs in the background, the only way to do this is with alda restar
     (alda-voice-regexp "\\([Vv][0-9]+\\):")
     (alda-string-regexp "“\\([^ ]+?\\)”")
     (alda-timing-regexp "[a-gA-GrR][\s+-]*\\([~.0-9\s/]*\\(m?s\\)?\\)")
+    (alda-repeating-regexp "\\(\\*[0-9]+\\)")
     (alda-cramming-regexp "\\({\\|}\\)")
+    (alda-grouping-regexp "\\(\\[\\|\\]\\)")
     (alda-accidental-regexp "\\([a-gA-GrR]\s*[-+]+\\)")
     (alda-bar-regexp "\\(|\\)")
     (alda-set-octave-regexp "\\(o[0-9]+\\)")
@@ -99,7 +102,9 @@ Because alda runs in the background, the only way to do this is with alda restar
     (alda-variable-regexp "\\(([a-zA-Z-]+!?\s+\\(\\([0-9]+\\)\\|\\(\\[\\(:[a-zA-Z]+\s?\\)+\\]\\)\\))\\)")
     (alda-markers-regexp "\\([@%][a-zA-Z]\\{2\\}[a-zA-Z0-9()+-]*\\)"))
 
-  (defvar alda-highlights
+  (defvar alda-highlights nil
+    "Font lock highlights for alda-mode")
+  (setq alda-highlights
     `((,alda-comment-regexp . (1 font-lock-comment-face) )
        (,alda-bar-regexp . (1 font-lock-comment-face))
        (,alda-voice-regexp . (1 font-lock-function-name-face))
@@ -109,7 +114,9 @@ Because alda runs in the background, the only way to do this is with alda restar
        (,alda-set-octave-regexp . (1 font-lock-constant-face))
        (,alda-shift-octave-regexp . (1 font-lock-constant-face))
        (,alda-timing-regexp . (1 font-lock-builtin-face))
+       (,alda-repeating-regexp . (1 font-lock-builtin-face))
        (,alda-cramming-regexp . (1 font-lock-builtin-face))
+       (,alda-grouping-regexp . (1 font-lock-builtin-face))
        (,alda-markers-regexp . (1 font-lock-builtin-face))
        (,alda-accidental-regexp . (1 font-lock-preprocessor-face)))))
 
