@@ -113,11 +113,11 @@ Because alda runs in the background, the only way to do this is with alda restar
        (,alda-variable-regexp . (1 font-lock-variable-name-face))
        (,alda-set-octave-regexp . (1 font-lock-constant-face))
        (,alda-shift-octave-regexp . (1 font-lock-constant-face))
+       (,alda-markers-regexp . (1 font-lock-builtin-face))
        (,alda-timing-regexp . (1 font-lock-builtin-face))
        (,alda-repeating-regexp . (1 font-lock-builtin-face))
        (,alda-cramming-regexp . (1 font-lock-builtin-face))
        (,alda-grouping-regexp . (1 font-lock-builtin-face))
-       (,alda-markers-regexp . (1 font-lock-builtin-face))
        (,alda-accidental-regexp . (1 font-lock-preprocessor-face)))))
 
 ;;; -- Indention code --
