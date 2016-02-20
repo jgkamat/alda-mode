@@ -34,9 +34,9 @@
 
 ;;; -- Region playback functions --
 
-(defun alda-play-text (text)
-  "Plays the given text using alda play --code.
-Argument TEXT the text to play from"
+(defun alda-run-cmd (cmd)
+  "Plays the given cmd using alda play --code.
+Argument CMD the cmd to run alda with"
   ;; Append an infinite loop if we will start a server
   (let ((process-loop-str
           (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string "alda status"))
@@ -46,9 +46,41 @@ Argument TEXT the text to play from"
       (message "Alda was not found on your $PATH.")
       (progn
         (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-          (concat "alda play --code '" text
+          (concat cmd
             ;; Infinite loop when server is down, prevents emacs from killing the alda server.
-            "'" process-loop-str))))))
+            process-loop-str))))))
+
+(defun alda-play-text (text)
+  "Plays the specified TEXT in the alda server.
+ARGUMENT TEXT The text to play with the current alda server."
+  (alda-run-cmd (concat "alda play --code '" text "'")))
+
+(defun alda-append-text (text)
+  "Append the specified TEXT to the alda server instance.
+ARGUMENT TEXT The text to append to the current alda server."
+  (alda-run-cmd (concat "alda append --code '" text "'")))
+
+(defun alda-play-file ()
+  "Plays the current buffer's file in alda."
+  (interactive)
+  (alda-run-cmd (concat "alda play --file " (buffer-file-name))))
+
+(defun alda-append-file ()
+  "Append the current buffer's file to the alda server without playing it.
+Argument START The start of the selection to append from.
+Argument END The end of the selection to append from."
+  (interactive)
+  (alda-run-cmd (concat "alda append --file " (buffer-file-name))))
+
+(defun alda-append-region (start end)
+  "Append the current buffer's file to the alda server without playing it.
+Argument START The start of the selection to append from.
+Argument END The end of the selection to append from."
+  (interactive "r")
+  (if (eq start end)
+    (messsage "no mark was set")
+    (alda-append-text (buffer-substring-no-properties start end))))
+
 
 (defun alda-play-region (start end)
   "Plays the current selection in alda.
