@@ -23,6 +23,12 @@
 ;;; Commentary:
 ;; This package provides syntax highlighting and basic alda integration.
 ;; Activate font-lock-mode to use the syntax features, and run 'alda-play-region' to play song files
+;;
+;;
+;; Variables:
+;; alda-binary-location: Set to the location of the binary executable.
+;; If nil, alda-mode will search for your binary executable on your path
+;;
 
 ;;; Constants:
 
@@ -34,6 +40,11 @@
 
 ;;; -- Region playback functions --
 
+(defcustom alda-binary-location nil
+  "Alda binary location for `alda-mode'.
+When set to nil, will attempt to use the binary found on your $PATH."
+  :type 'string)
+
 (defun alda-run-cmd (cmd)
   "Plays the given cmd using alda play --code.
 Argument CMD the cmd to run alda with"
@@ -41,36 +52,39 @@ Argument CMD the cmd to run alda with"
   (let ((process-loop-str
           (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string "alda status"))
             (progn (message "Alda server down, starting in Emacs.") "&&  while true; do; sleep 1; done")
-            "")))
-    (if (eq (length (shell-command-to-string "which alda")) 0)
-      (message "Alda was not found on your $PATH.")
+            ""))
+         (alda-location (if alda-binary-location
+                          alda-binary-location
+                          (locate-file "alda" exec-path))))
+    (if (not alda-location)
+      (message "Alda was not found on your $PATH and alda-binary-location was nil.")
       (progn
         (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-          (concat cmd
+          (concat alda-location " " cmd
             ;; Infinite loop when server is down, prevents emacs from killing the alda server.
             process-loop-str))))))
 
 (defun alda-play-text (text)
   "Plays the specified TEXT in the alda server.
 ARGUMENT TEXT The text to play with the current alda server."
-  (alda-run-cmd (concat "alda play --code '" text "'")))
+  (alda-run-cmd (concat "play --code '" text "'")))
 
 (defun alda-append-text (text)
   "Append the specified TEXT to the alda server instance.
 ARGUMENT TEXT The text to append to the current alda server."
-  (alda-run-cmd (concat "alda append --code '" text "'")))
+  (alda-run-cmd (concat "append --code '" text "'")))
 
 (defun alda-play-file ()
   "Plays the current buffer's file in alda."
   (interactive)
-  (alda-run-cmd (concat "alda play --file " (buffer-file-name))))
+  (alda-run-cmd (concat "play --file " (buffer-file-name))))
 
 (defun alda-append-file ()
   "Append the current buffer's file to the alda server without playing it.
 Argument START The start of the selection to append from.
 Argument END The end of the selection to append from."
   (interactive)
-  (alda-run-cmd (concat "alda append --file " (buffer-file-name))))
+  (alda-run-cmd (concat "append --file " (buffer-file-name))))
 
 (defun alda-append-region (start end)
   "Append the current buffer's file to the alda server without playing it.
@@ -113,7 +127,7 @@ Argument END The end of the selection to play from."
   "Stops songs from playing, and cleans up idle alda runner processes.
 Because alda runs in the background, the only way to do this is with alda restart as of now."
   (interactive)
-  (shell-command "alda stop -y")
+  (shell-command "stop -y")
   (delete-process +alda-output-buffer+))
 
 ;;; -- Font Lock Regexes --
