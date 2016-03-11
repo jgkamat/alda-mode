@@ -24,6 +24,8 @@ alda-mode can play segments of alda from within Emacs! Simply highlight a sectio
 
 This will take a while during the first call, which will start the alda server within Emacs (if not already on your system). `alda` will need to be on your path.
 
+If you want to use a custom alda binary, set `alda-binary-location` to your alda binary. Ex: `(setq alda-binary-location "/usr/local/bin/alda")`
+
 Keep in mind, the server will only see the selection you make, and this has consequences. For example, you must run a snippet of code defining an instrument before you hear anything (or defining a marker before using it). `alda-play-region` will use a running alda server if it finds one, but will start one within Emacs if not found. Support is currently only available for Linux/Mac for this command.
 
 Please submit any bugs with this feature as issues to this repository.
