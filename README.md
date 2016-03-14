@@ -4,6 +4,8 @@ The best way to edit your [alda](https://github.com/alda-lang/alda) files in Ema
 
 Alda mode is a simple mode to provide syntax highlighting and other basic language features for [Alda, the music programming language](https://github.com/alda-lang/alda) written in Clojure.
 
+![Preview](http://i.imgur.com/lRAA27L.png)
+
 ## Installation
 
 The easiest way to install alda-mode is through [melpa](http://melpa.org/#/getting-started). Simply `M-x package-install` `alda-mode`.
