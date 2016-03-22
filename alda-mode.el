@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016 Jay Kamat
 ;; Author: Jay Kamat <github@jgkamat.33mail.com>
-;; Version: 0.2
+;; Version: 0.2.1
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
 ;; Package-Requires: ((emacs "24.0"))
@@ -43,29 +43,42 @@
 
 ;;; -- Region playback functions --
 
+(defgroup Alda nil
+  "A group for alda customization."
+  :group 'applications)
+
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
 When set to nil, will attempt to use the binary found on your $PATH."
-  :type 'string)
+  :type 'string
+  :group 'Alda)
+
+(defun alda-location()
+  "Returns what 'alda' should be called as in the shell based on alda-binary-location or the path."
+  (if alda-binary-location
+    alda-binary-location
+    (locate-file "alda" exec-path)))
+
+(defun alda-server()
+  "Starts an alda server in an emacs process."
+  (interactive)
+  (start-process-shell-command +alda-output-name+ +alda-output-buffer+ (concat (alda-location)  " server")))
 
 (defun alda-run-cmd (cmd)
   "Plays the given cmd using alda play --code.
 Argument CMD the cmd to run alda with"
-  ;; Append an infinite loop if we will start a server
-  (let ((process-loop-str
-          (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string "alda status"))
-            (progn (message "Alda server down, starting in Emacs.") "&&  while true; do; sleep 1; done")
-            ""))
-         (alda-location (if alda-binary-location
-                          alda-binary-location
-                          (locate-file "alda" exec-path))))
-    (if (not alda-location)
+  (let ((server-down
+          (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string (concat (alda-location) " status")))
+            (progn (message "Alda server down, starting in Emacs.") t)
+            nil)))
+    (if (not (alda-location))
       (message "Alda was not found on your $PATH and alda-binary-location was nil.")
       (progn
+        (when server-down
+          (alda-server)
+          (sleep-for 2)) ;; Try to stop a race condition
         (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-          (concat alda-location " " cmd
-            ;; Infinite loop when server is down, prevents emacs from killing the alda server.
-            process-loop-str))))))
+          (concat (alda-location) " " cmd))))))
 
 (defun alda-play-text (text)
   "Plays the specified TEXT in the alda server.
@@ -95,7 +108,7 @@ Argument START The start of the selection to append from.
 Argument END The end of the selection to append from."
   (interactive "r")
   (if (eq start end)
-    (messsage "no mark was set")
+    (message "no mark was set")
     (alda-append-text (buffer-substring-no-properties start end))))
 
 
@@ -130,7 +143,7 @@ Argument END The end of the selection to play from."
   "Stops songs from playing, and cleans up idle alda runner processes.
 Because alda runs in the background, the only way to do this is with alda restart as of now."
   (interactive)
-  (shell-command "stop -y")
+  (shell-command (concat (alda-location) " stop -y"))
   (delete-process +alda-output-buffer+))
 
 ;;; -- Font Lock Regexes --
