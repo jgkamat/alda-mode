@@ -37,7 +37,8 @@ Please submit any bugs with this feature as issues to this repository.
 Evil integration is automatically applied if you install evil before alda-mode. If you are installing evil after alda-mode, please reinstall/recompile alda-mode.
 
 ```
-(require 'evil)
+(package-install 'evil)
+(package-install 'alda-mode)
 (require 'alda-mode)
 ```
 
