@@ -85,43 +85,43 @@ Argument CMD the cmd to run alda with"
 ARGUMENT TEXT The text to play with the current alda server."
   (alda-run-cmd (concat "play --code '" text "'")))
 
-(defun alda-append-text (text)
-  "Append the specified TEXT to the alda server instance.
-ARGUMENT TEXT The text to append to the current alda server."
-  (alda-run-cmd (concat "append --code '" text "'")))
-
 (defun alda-play-file ()
   "Plays the current buffer's file in alda."
   (interactive)
-  (alda-run-cmd (concat "play --file " (buffer-file-name))))
+  (alda-run-cmd (concat "play --file " "\"" (buffer-file-name) "\"")))
 
-(defun alda-append-file ()
-  "Append the current buffer's file to the alda server without playing it.
-Argument START The start of the selection to append from.
-Argument END The end of the selection to append from."
-  (interactive)
-  (alda-run-cmd (concat "append --file " (buffer-file-name))))
+;; TODO Come up with a replacement for the alda append command
+;; (defun alda-append-text (text)
+;;   "Append the specified TEXT to the alda server instance.
+;; ARGUMENT TEXT The text to append to the current alda server."
+;;   (alda-run-cmd (concat "append --code '" text "'")))
 
-(defun alda-append-region (start end)
-  "Append the current buffer's file to the alda server without playing it.
-Argument START The start of the selection to append from.
-Argument END The end of the selection to append from."
-  (interactive "r")
-  (if (eq start end)
-    (message "no mark was set")
-    (alda-append-text (buffer-substring-no-properties start end))))
+;; (defun alda-append-file ()
+;;   "Append the current buffer's file to the alda server without playing it.
+;; Argument START The start of the selection to append from.
+;; Argument END The end of the selection to append from."
+;;   (interactive)
+;;   (alda-run-cmd (concat "append --file " "\"" (buffer-file-name) "\"")))
 
+;; (defun alda-append-region (start end)
+;;   "Append the current buffer's file to the alda server without playing it.
+;; Argument START The start of the selection to append from.
+;; Argument END The end of the selection to append from."
+;;   (interactive "r")
+;;   (if (eq start end)
+;;     (message "no mark was set")
+;;     (alda-append-text (buffer-substring-no-properties start end))))
 
-(defun alda-play-region (start end)
-  "Plays the current selection in alda.
-Argument START The start of the selection to play from.
-Argument END The end of the selection to play from."
+;; (defun alda-play-region (start end)
+;;   "Plays the current selection in alda.
+;; Argument START The start of the selection to play from.
+;; Argument END The end of the selection to play from."
 
-  (interactive "r")
+;;   (interactive "r")
 
-  (if (eq start end)
-    (message "No mark was set!")
-    (alda-play-text (buffer-substring-no-properties start end))))
+;;   (if (eq start end)
+;;     (message "No mark was set!")
+;;     (alda-play-text (buffer-substring-no-properties start end))))
 
 ;; If evil is found, make evil commands as well.
 (eval-when-compile
