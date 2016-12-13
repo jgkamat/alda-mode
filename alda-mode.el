@@ -218,7 +218,7 @@ Because alda runs in the background, the only way to do this is with alda restar
   "Calculates indentation for `alda-mode' code."
   (or
     ;; Flush labels to the left margin.
-    (and (looking-at "[A-Za-z0-9\" -]+:\\s-*$") 0)
+    (and (looking-at "[A-Za-z0-9\" \\t-]+:\\s-*") 0)
     ;; All comments indention are the previous line's indention.
     (and (looking-at +alda-comment-str+) (indent-prev-level))
     ;; The rest goes at the first tab stop.
