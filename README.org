@@ -16,15 +16,13 @@ Alda mode is a simple mode to provide syntax highlighting and other basic langua
    :CUSTOM_ID: installation
    :END:
 
-The easiest way to install alda-mode is through
-[[http://melpa.org/#/getting-started][melpa]]. Simply
+The easiest way to install alda-mode is through [[http://melpa.org/#/getting-started][melpa]]. Simply
 ~M-x package-install~ ~alda-mode~.
 
 Once installed, place ~(require 'alda-mode)~ in your init.el.
 
 For evil integration,
-[[https://github.com/jgkamat/alda-mode#evil-integration][simply install
-evil before alda-mode]].
+[[https://github.com/jgkamat/alda-mode#evil-integration][simply install evil before alda-mode]].
 
 Alda files (~.alda~ extension) should now have syntax highlighting via
 font-lock-mode when opened.
@@ -102,7 +100,7 @@ operator to do the same thing! (~gpp~ will play the current line,
    :CUSTOM_ID: contributing
    :END:
 
-If you find a bug or want to improve alda-mode, submit a PR! ~)
+If you find a bug or want to improve alda-mode, submit a PR! ~=)~
 
 ** License
    :PROPERTIES:
