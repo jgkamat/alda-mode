@@ -117,14 +117,14 @@ ARGUMENT TEXT The text to play with the current alda server."
 ;;     (message "no mark was set")
 ;;     (alda-append-text (buffer-substring-no-properties start end))))
 
-;; (defun alda-play-region (start end)
-;;   "Plays the current selection in alda.
-;; Argument START The start of the selection to play from.
-;; Argument END The end of the selection to play from."
-;;   (interactive "r")
-;;   (if (eq start end)
-;;     (message "No mark was set!")
-;;     (alda-play-text (buffer-substring-no-properties start end))))
+(defun alda-play-region (start end)
+  "Plays the current selection in alda.
+Argument START The start of the selection to play from.
+Argument END The end of the selection to play from."
+  (interactive "r")
+  (if (eq start end)
+    (message "No mark was set!")
+    (alda-play-text (buffer-substring-no-properties start end))))
 
 ;; If evil is found, make evil commands as well.
 (eval-when-compile
@@ -146,7 +146,7 @@ ARGUMENT TEXT The text to play with the current alda server."
   "Stops songs from playing, and cleans up idle alda runner processes.
 Because alda runs in the background, the only way to do this is with alda restart as of now."
   (interactive)
-  (shell-command (concat (alda-location) " stop -y"))
+  (shell-command (concat (alda-location) " down"))
   (delete-process +alda-output-buffer+))
 
 ;;; -- Font Lock Regexes --
@@ -277,6 +277,29 @@ Because alda runs in the background, the only way to do this is with alda restar
   ;; Set alda highlighting
   (setq font-lock-defaults '(alda-highlights)))
 
+(defun alda-play-block ()
+  (interactive)
+  (let* ((p (point)))
+	(mark-paragraph)
+	(alda-play-region (region-beginning) (region-end))
+	(goto-char p)))
+
+(defun alda-play-line ()
+  (interactive)
+  (alda-play-region (line-beginning-position) (line-end-position)))
+
+(defun alda-play-buffer ()
+  (interactive)
+  (let* ((p (point)))
+    (mark-whole-buffer)
+    (alda-play-region (region-beginning) (region-end))
+    (goto-char p)))
+
+(progn
+  (define-key alda-mode-map "\C-c\C-r" 'alda-play-region)
+  (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
+  (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
+  (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer))
 
 
 ;; Open alda files in alda-mode
