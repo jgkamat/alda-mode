@@ -96,26 +96,26 @@ ARGUMENT TEXT The text to play with the current alda server."
 ;; Before, you could use these commands to load only parts of your file, but
 ;; there's no way to do this right now. Ask for a replacement for alda append!
 
-;; (defun alda-append-text (text)
-;;   "Append the specified TEXT to the alda server instance.
-;; ARGUMENT TEXT The text to append to the current alda server."
-;;   (alda-run-cmd (concat "append --code '" text "'")))
+(defun alda-append-text (text)
+  "Append the specified TEXT to the alda server instance.
+ARGUMENT TEXT The text to append to the current alda server."
+  (alda-run-cmd (concat "append --code '" text "'")))
 
-;; (defun alda-append-file ()
-;;   "Append the current buffer's file to the alda server without playing it.
-;; Argument START The start of the selection to append from.
-;; Argument END The end of the selection to append from."
-;;   (interactive)
-;;   (alda-run-cmd (concat "append --file " "\"" (buffer-file-name) "\"")))
+(defun alda-append-file ()
+  "Append the current buffer's file to the alda server without playing it.
+Argument START The start of the selection to append from.
+Argument END The end of the selection to append from."
+  (interactive)
+  (alda-run-cmd (concat "append --file " "\"" (buffer-file-name) "\"")))
 
-;; (defun alda-append-region (start end)
-;;   "Append the current buffer's file to the alda server without playing it.
-;; Argument START The start of the selection to append from.
-;; Argument END The end of the selection to append from."
-;;   (interactive "r")
-;;   (if (eq start end)
-;;     (message "no mark was set")
-;;     (alda-append-text (buffer-substring-no-properties start end))))
+(defun alda-append-region (start end)
+  "Append the current buffer's file to the alda server without playing it.
+Argument START The start of the selection to append from.
+Argument END The end of the selection to append from."
+  (interactive "r")
+  (if (eq start end)
+    (message "no mark was set")
+    (alda-append-text (buffer-substring-no-properties start end))))
 
 (defun alda-play-region (start end)
   "Plays the current selection in alda.
@@ -279,10 +279,9 @@ Because alda runs in the background, the only way to do this is with alda restar
 
 (defun alda-play-block ()
   (interactive)
-  (let* ((p (point)))
-	(mark-paragraph)
-	(alda-play-region (region-beginning) (region-end))
-	(goto-char p)))
+  (save-excursion
+    (mark-paragraph)
+    (alda-play-region (region-beginning) (region-end))))
 
 (defun alda-play-line ()
   (interactive)
@@ -290,17 +289,14 @@ Because alda runs in the background, the only way to do this is with alda restar
 
 (defun alda-play-buffer ()
   (interactive)
-  (let* ((p (point)))
-    (mark-whole-buffer)
-    (alda-play-region (region-beginning) (region-end))
-    (goto-char p)))
+  (alda-play-text (buffer-string)))
 
-(progn
-  (define-key alda-mode-map "\C-c\C-r" 'alda-play-region)
-  (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
-  (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
-  (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer))
-
+(defun define-alda-ess-key-map ()
+  (progn
+    (define-key alda-mode-map "\C-c\C-r" 'alda-play-region)
+    (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
+    (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
+    (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer)))
 
 ;; Open alda files in alda-mode
 ;;;###autoload
