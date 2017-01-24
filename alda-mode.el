@@ -213,7 +213,7 @@ Because alda runs in the background, the only way to do this is with alda restar
       (save-excursion (indent-line-to indent))
       (indent-line-to indent))))
 
-(defun indent-prev-level ()
+(defun alda-indent-prev-level ()
   "Indent this line to the indention level of the previous non-whitespace line."
   (save-excursion
     (forward-line -1)
@@ -232,7 +232,7 @@ Because alda runs in the background, the only way to do this is with alda restar
     ;; Flush labels to the left margin.
     (and (looking-at "[A-Za-z0-9\" \\t-]+:\\s-*") 0)
     ;; All comments indention are the previous line's indention.
-    (and (looking-at +alda-comment-str+) (indent-prev-level))
+    (and (looking-at +alda-comment-str+) (alda-indent-prev-level))
     ;; The rest goes at the first tab stop.
     (or (indent-next-tab-stop 0))))
 
@@ -298,7 +298,7 @@ Because alda runs in the background, the only way to do this is with alda restar
   (setq comment-start-skip (concat +alda-comment-str+ "\\s-*"))
   (setq comment-multi-line (concat +alda-comment-str+ " "))
   ;; Comments should use the indention of the last line
-  (setq comment-indent-function #'indent-prev-level)
+  (setq comment-indent-function #'alda-indent-prev-level)
 
   ;; Set custom mappings
   (use-local-map alda-mode-map)
