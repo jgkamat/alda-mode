@@ -44,13 +44,19 @@
 ;;; -- Region playback functions --
 
 (defgroup Alda nil
-  "A group for alda customization."
+  "Alda customization options"
   :group 'applications)
 
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
 When set to nil, will attempt to use the binary found on your $PATH."
   :type 'string
+  :group 'Alda)
+
+(defcustom alda-ess-keymap t
+  "Whether to use ess keymap in alda-mode
+When set to nil, will not set any ess keybindings"
+  :type 'boolean
   :group 'Alda)
 
 (defun alda-location()
@@ -96,26 +102,26 @@ ARGUMENT TEXT The text to play with the current alda server."
 ;; Before, you could use these commands to load only parts of your file, but
 ;; there's no way to do this right now. Ask for a replacement for alda append!
 
-(defun alda-append-text (text)
-  "Append the specified TEXT to the alda server instance.
-ARGUMENT TEXT The text to append to the current alda server."
-  (alda-run-cmd (concat "append --code '" text "'")))
+;; (defun alda-append-text (text)
+;;   "Append the specified TEXT to the alda server instance.
+;; ARGUMENT TEXT The text to append to the current alda server."
+;;   (alda-run-cmd (concat "append --code '" text "'")))
 
-(defun alda-append-file ()
-  "Append the current buffer's file to the alda server without playing it.
-Argument START The start of the selection to append from.
-Argument END The end of the selection to append from."
-  (interactive)
-  (alda-run-cmd (concat "append --file " "\"" (buffer-file-name) "\"")))
+;; (defun alda-append-file ()
+;;   "Append the current buffer's file to the alda server without playing it.
+;; Argument START The start of the selection to append from.
+;; Argument END The end of the selection to append from."
+;;   (interactive)
+;;   (alda-run-cmd (concat "append --file " "\"" (buffer-file-name) "\"")))
 
-(defun alda-append-region (start end)
-  "Append the current buffer's file to the alda server without playing it.
-Argument START The start of the selection to append from.
-Argument END The end of the selection to append from."
-  (interactive "r")
-  (if (eq start end)
-    (message "no mark was set")
-    (alda-append-text (buffer-substring-no-properties start end))))
+;; (defun alda-append-region (start end)
+;;   "Append the current buffer's file to the alda server without playing it.
+;; Argument START The start of the selection to append from.
+;; Argument END The end of the selection to append from."
+;;   (interactive "r")
+;;   (if (eq start end)
+;;     (message "no mark was set")
+;;     (alda-append-text (buffer-substring-no-properties start end))))
 
 (defun alda-play-region (start end)
   "Plays the current selection in alda.
@@ -239,6 +245,20 @@ Because alda runs in the background, the only way to do this is with alda restar
       (delete-horizontal-space)
       (tab-to-tab-stop))))
 
+(defun alda-play-block ()
+  (interactive)
+  (save-excursion
+    (mark-paragraph)
+    (alda-play-region (region-beginning) (region-end))))
+
+(defun alda-play-line ()
+  (interactive)
+  (alda-play-region (line-beginning-position) (line-end-position)))
+
+(defun alda-play-buffer ()
+  (interactive)
+  (alda-play-text (buffer-string)))
+
 ;;; -- Alda Keymaps --
 ;; TODO determine standard keymap for alda-mode
 
@@ -252,7 +272,14 @@ Because alda runs in the background, the only way to do this is with alda restar
   (define-key alda-mode-map [menu-bar alda-mode] (cons "Alda" (make-sparse-keymap)))
   (define-key alda-mode-map [menu-bar alda-mode alda-colon]
     '(menu-item "Insert Colon" alda-colon
-       :help "Insert a colon; if it follows a label, delete the label's indentation")))
+       :help "Insert a colon; if it follows a label, delete the label's indentation"))
+
+  ;; Add alda-ess-keymap if requested
+  (when alda-ess-keymap
+    (define-key alda-mode-map "\C-c\C-r" 'alda-play-region)
+    (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
+    (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
+    (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer)))
 
 
 ;;; -- Alda Mode Definition --
@@ -276,27 +303,6 @@ Because alda runs in the background, the only way to do this is with alda restar
 
   ;; Set alda highlighting
   (setq font-lock-defaults '(alda-highlights)))
-
-(defun alda-play-block ()
-  (interactive)
-  (save-excursion
-    (mark-paragraph)
-    (alda-play-region (region-beginning) (region-end))))
-
-(defun alda-play-line ()
-  (interactive)
-  (alda-play-region (line-beginning-position) (line-end-position)))
-
-(defun alda-play-buffer ()
-  (interactive)
-  (alda-play-text (buffer-string)))
-
-(defun define-alda-ess-key-map ()
-  (progn
-    (define-key alda-mode-map "\C-c\C-r" 'alda-play-region)
-    (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
-    (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
-    (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer)))
 
 ;; Open alda files in alda-mode
 ;;;###autoload
