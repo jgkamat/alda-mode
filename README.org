@@ -82,8 +82,16 @@ a warning message.
    :CUSTOM_ID: keybindings
    :END:
 
-alda-mode does not assign any keybindings by default. Here are some
-simple example keybinds:
+alda-mode adds a couple simple keybindings by default. These are documented below:
+
+| Keybind   | Function         | Explanation                                      |
+|-----------+------------------+--------------------------------------------------|
+| ~C-c C-r~ | alda-play-region | Plays selected text                              |
+| ~C-c C-c~ | alda-play-block  | Plays the paragraph on point                     |
+| ~C-c C-n~ | alda-play-line   | Plays a single line                              |
+| ~C-c C-b~ | alda-play-buffer | Plays the entire buffer, as text (not as a file) |
+
+Here are some simple example keybinds for evil integration (or if you want to add your own custom keybindings):
 
 #+BEGIN_SRC emacs-lisp
     (global-set-key (kbd "C-c a") 'alda-play-region) ;; Global alda-play-map

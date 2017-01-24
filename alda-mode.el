@@ -32,6 +32,9 @@
 ;; Ex: (setq alda-binary-location "/usr/local/bin/alda")
 ;; Ex: (setq alda-binary-location nil) ;; Use default alda location
 ;;
+;; alda-ess-keymap: Whether to add the default ess keymap.
+;; If nil, alda-mode will not add the default ess keymaps.
+;; Ex: (setq alda-ess-keymap nil) ;; before (require 'alda)
 
 ;;; Constants:
 
