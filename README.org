@@ -6,9 +6,7 @@
 
 The best way to edit your [[https://github.com/alda-lang/alda][alda]] files in Emacs!
 
-Alda mode is a simple mode to provide syntax highlighting and other basic language features for [[https://github.com/alda-lang/alda][Alda,the music programming language]] written in Clojure.
-
-#+CAPTION: Preview
+Alda mode is a simple mode to provide syntax highlighting and other basic language features for [[https://github.com/alda-lang/alda][Alda, the music programming language]] written in Clojure.
 
 [[http://i.imgur.com/lRAA27L.png]]
 ** Installation
