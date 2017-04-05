@@ -1,0 +1,11 @@
+
+* 0.1.0
+- Initial Frozen Release
+- Tested with ~alda 1.0.0-rc56~
+- Syntax Highlighting via ~font-lock-mode~
+  - new style comments are a bit rough around the edges
+- ~evil~ integration
+  - Option to add a evil alda play operator
+- Running ~alda~ servers within emacs, and using an external alda server
+- ess keybinds for playing by block, line, etc.
+- Indentation
