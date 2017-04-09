@@ -1,9 +1,5 @@
-# My root editorconfig thingy
-
-# top-most EditorConfig file
 root = false
 
-# Unix-style newlines with a newline ending every file
 [*]
 end_of_line = lf
 insert_final_newline = true
@@ -18,4 +14,4 @@ indent_style = space
 indent_size = 2
 
 [*.{md,markdown}]
-max_line_length = 9999999
+max_line_length = off

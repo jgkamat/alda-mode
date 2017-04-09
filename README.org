@@ -1,5 +1,5 @@
 * Alda Mode
-[[http://melpa.org/#/alda-mode][file:http://melpa.org/packages/alda-mode-badge.svg]]
+[[http://melpa.org/#/alda-mode][file:http://melpa.org/packages/alda-mode-badge.svg]] [[http://stable.melpa.org/#/alda-mode][file:http://stable.melpa.org/packages/alda-mode-badge.svg]]
   :PROPERTIES:
   :CUSTOM_ID: alda-mode-melpa
   :END:
