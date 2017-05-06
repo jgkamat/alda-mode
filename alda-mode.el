@@ -92,7 +92,7 @@ Argument CMD the cmd to run alda with"
 (defun alda-play-text (text)
   "Plays the specified TEXT in the alda server.
 ARGUMENT TEXT The text to play with the current alda server."
-  (alda-run-cmd (concat "play --code '" text "'")))
+  (alda-run-cmd (concat "play --code \"" text "\"")))
 
 (defun alda-play-file ()
   "Plays the current buffer's file in alda."
