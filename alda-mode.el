@@ -92,8 +92,10 @@ Argument CMD the cmd to run alda with"
 (defun alda-play-text (text)
   "Plays the specified TEXT in the alda server.
 ARGUMENT TEXT The text to play with the current alda server."
-  (let ((one-liner-text (replace-regexp-in-string "\n" " " text)))
-    (alda-run-cmd (concat "play --code \"" one-liner-text "\""))))
+  (if (eql system-type 'windows-nt) 
+      (let ((one-liner-text (replace-regexp-in-string "\n" " " text)))
+        (alda-run-cmd (concat "play --code \"" one-liner-text "\"")))
+    (alda-run-cmd (concat "play --code '" text "'"))))
 
 (defun alda-play-file ()
   "Plays the current buffer's file in alda."
