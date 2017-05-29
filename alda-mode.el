@@ -51,12 +51,13 @@
 
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
-When set to nil, will attempt to use the binary found on your $PATH."
+When set to nil, will attempt to use the binary found on your $PATH.
+This must be a _full_ path to."
   :type 'string
   :group 'Alda)
 
 (defcustom alda-ess-keymap t
-  "Whether to use ess keymap in alda-mode
+  "Whether to use ess keymap in alda-mode.
 When set to nil, will not set any ess keybindings"
   :type 'boolean
   :group 'Alda)
@@ -70,11 +71,11 @@ When set to nil, will not set any ess keybindings"
 (defun alda-server()
   "Starts an alda server in an emacs process."
   (interactive)
-  (start-process-shell-command +alda-output-name+ +alda-output-buffer+ (concat (alda-location)  " server")))
+  (start-process +alda-output-name+ +alda-output-buffer+ (alda-location)  "server"))
 
-(defun alda-run-cmd (cmd)
-  "Plays the given cmd using alda play --code.
-Argument CMD the cmd to run alda with"
+(defun alda-run-cmd (&rest args)
+  "Run a given alda command with specified args.
+Argument ARGS a list of arguments to pass to alda"
   (interactive "sEnter alda command: ")
   (let ((server-down
           (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string (concat (alda-location) " status")))
@@ -86,21 +87,18 @@ Argument CMD the cmd to run alda with"
         (when server-down
           (alda-server)
           (sleep-for 2)) ;; Try to stop a race condition
-        (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-          (concat (alda-location) " " cmd))))))
+        (apply #'start-process +alda-output-name+ +alda-output-buffer+
+          (alda-location) args)))))
 
 (defun alda-play-text (text)
   "Plays the specified TEXT in the alda server.
 ARGUMENT TEXT The text to play with the current alda server."
-  (if (eql system-type 'windows-nt) 
-      (let ((one-liner-text (replace-regexp-in-string "\n" " " text)))
-        (alda-run-cmd (concat "play --code \"" one-liner-text "\"")))
-    (alda-run-cmd (concat "play --code '" text "'"))))
+  (alda-run-cmd "play" "--code" text))
 
 (defun alda-play-file ()
   "Plays the current buffer's file in alda."
   (interactive)
-  (alda-run-cmd (concat "play --file " "\"" (buffer-file-name) "\"")))
+  (alda-run-cmd "play" "--file" (buffer-file-name)))
 
 ;; TODO Come up with a replacement for the alda append command
 ;; alda append was deprecated, which breaks all these commands
