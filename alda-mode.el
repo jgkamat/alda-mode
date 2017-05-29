@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016 Jay Kamat
 ;; Author: Jay Kamat <github@jgkamat.33mail.com>
-;; Version: 0.2.1
+;; Version: 0.1.1
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
 ;; Package-Requires: ((emacs "24.0"))
