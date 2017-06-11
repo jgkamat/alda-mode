@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/alda-mode
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: apk add --update curl
+      - run:
+            name: Trigger Jobs
+            command: |
+              function trigger_job() {
+                job_name=$1
+                curl -u ${CIRCLE_API_TOKEN}: \
+                  -d build_parameters[CIRCLE_JOB]=${job_name} \
+                  -d revision=$CIRCLE_SHA1 \
+                  https://circleci.com/api/v1.1/project/github/jgkamat/alda-mode/tree/$CIRCLE_BRANCH
+              }
+              trigger_job emacs-25-1
+              trigger_job emacs-24-3
+
+  # Run our tasks as independent jobs
+
+  emacs-25-1:
+       docker:
+         - image: silex/emacs:25.1
+       working_directory: ~/alda-mode
+       steps:
+         - run: curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+         - checkout
+         - run: ~/.cask/bin/cask install
+         - run: ~/.cask/bin/cask exec ert-runner
+
+  emacs-24-3:
+       docker:
+         - image: silex/emacs:24.3
+       working_directory: ~/alda-mode
+       steps:
+         - run: curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+         - checkout
+         - run: ~/.cask/bin/cask install
+         - run: ~/.cask/bin/cask exec ert-runner

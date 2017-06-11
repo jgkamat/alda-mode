@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016 Jay Kamat
 ;; Author: Jay Kamat <github@jgkamat.33mail.com>
-;; Version: 0.2.1
+;; Version: 0.1.1
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
 ;; Package-Requires: ((emacs "24.0"))
@@ -57,7 +57,8 @@ If you are experiencing problems, try clearing your history with 'alda-history-c
 
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
-When set to nil, will attempt to use the binary found on your $PATH."
+When set to nil, will attempt to use the binary found on your $PATH.
+This must be a _full_ path to."
   :type 'string
   :group 'Alda)
 
@@ -67,20 +68,20 @@ When set to nil, will not set any ess keybindings"
   :type 'boolean
   :group 'Alda)
 
-(defun alda-location()
+(defun alda-location ()
   "Returns what 'alda' should be called as in the shell based on alda-binary-location or the path."
   (if alda-binary-location
     alda-binary-location
     (locate-file "alda" exec-path)))
 
-(defun alda-server()
+(defun alda-server ()
   "Starts an alda server in an emacs process."
   (interactive)
-  (start-process-shell-command +alda-output-name+ +alda-output-buffer+ (concat (alda-location)  " server")))
+  (start-process +alda-output-name+ +alda-output-buffer+ (alda-location)  "server"))
 
-(defun alda-run-cmd (cmd)
-  "Plays the given cmd using alda play --code.
-Argument CMD the cmd to run alda with"
+(defun alda-run-cmd (&rest args)
+  "Run a given alda command with specified args.
+Argument ARGS a list of arguments to pass to alda"
   (interactive "sEnter alda command: ")
   (let ((server-down
           (if (string-match "[Ss]erver [Dd]own" (shell-command-to-string (concat (alda-location) " status")))
@@ -92,20 +93,20 @@ Argument CMD the cmd to run alda with"
         (when server-down
           (alda-server)
           (sleep-for 2)) ;; Try to stop a race condition
-        (start-process-shell-command +alda-output-name+ +alda-output-buffer+
-          (concat (alda-location) " " cmd))))))
+        (apply #'start-process +alda-output-name+ +alda-output-buffer+
+          (alda-location) args)))))
 
 (defun alda-play-text (text)
   "Plays the specified TEXT in the alda server.
 This does include any history you might have added.
 ARGUMENT TEXT The text to play with the current alda server."
-  (alda-run-cmd (concat "play --history '" *alda-history* "' --code '" text "'")))
+  (alda-run-cmd "play" "--history" *alda-history* "--code" text))
 
 (defun alda-play-file ()
   "Plays the current buffer's file in alda.
 This does not include any history that you may have added"
   (interactive)
-  (alda-run-cmd (concat "play --file " "\"" (buffer-file-name) "\"")))
+  (alda-run-cmd "play" "--file" (buffer-file-name)))
 
 ;; This is the replacement for the old 'alda append' command
 ;; Previously, command history was stored on the server, now it is stored on the client.
