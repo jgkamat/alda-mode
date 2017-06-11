@@ -62,13 +62,13 @@ When set to nil, will not set any ess keybindings"
   :type 'boolean
   :group 'Alda)
 
-(defun alda-location()
+(defun alda-location ()
   "Returns what 'alda' should be called as in the shell based on alda-binary-location or the path."
   (if alda-binary-location
     alda-binary-location
     (locate-file "alda" exec-path)))
 
-(defun alda-server()
+(defun alda-server ()
   "Starts an alda server in an emacs process."
   (interactive)
   (start-process +alda-output-name+ +alda-output-buffer+ (alda-location)  "server"))

@@ -1,4 +1,4 @@
-* Alda Mode
+* Alda Mode [[https://circleci.com/gh/jgkamat/alda-mode][file:https://circleci.com/gh/jgkamat/alda-mode.svg?style=svg]]
 [[http://melpa.org/#/alda-mode][file:http://melpa.org/packages/alda-mode-badge.svg]]
   :PROPERTIES:
   :CUSTOM_ID: alda-mode-melpa
