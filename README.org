@@ -1,4 +1,4 @@
-* Alda Mode [[http://melpa.org/#/alda-mode][file:http://melpa.org/packages/alda-mode-badge.svg ]]  [[http://stable.melpa.org/#/alda-mode][file:http://stable.melpa.org/packages/alda-mode-badge.svg]] [[https://circleci.com/gh/jgkamat/alda-mode][file:https://circleci.com/gh/jgkamat/alda-mode.svg?style=shield]]
+* Alda Mode [[https://melpa.org/#/alda-mode][file:https://melpa.org/packages/alda-mode-badge.svg]]  [[https://stable.melpa.org/#/alda-mode][file:https://stable.melpa.org/packages/alda-mode-badge.svg]] [[https://circleci.com/gh/jgkamat/alda-mode][file:https://circleci.com/gh/jgkamat/alda-mode.svg?style=shield]]
 
 The best way to edit your [[https://github.com/alda-lang/alda][alda]] files in Emacs!
 
