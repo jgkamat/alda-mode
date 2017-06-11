@@ -22,10 +22,11 @@ Note: Mocking this command assumes the alda-run-cmd function is working properly
   "Check if ERT is working. :)"
   (should t))
 
-(ert-deftest alda-found ()
-  "Check if alda is found."
-  (should (alda-location))
-  (should (string-match "alda$" (alda-location))))
+;; TODO enable this test once we start actually using alda in our tests
+;; (ert-deftest alda-found ()
+;;   "Check if alda is found."
+;;   (should (alda-location))
+;;   (should (string-match "alda$" (alda-location))))
 
 (ert-deftest alda-play-text-test ()
   "Tests if alda-play-text is working correctly."
