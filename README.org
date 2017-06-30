@@ -2,7 +2,8 @@
 
 The best way to edit your [[https://github.com/alda-lang/alda][alda]] files in Emacs!
 
-Alda mode is a simple mode to provide syntax highlighting and other basic language features for [[https://github.com/alda-lang/alda][Alda, the music programming language]] written in Clojure.
+Alda mode is a simple mode to provide syntax highlighting and other basic
+language features for [[https://github.com/alda-lang/alda][Alda, the music programming language]] written in Clojure.
 
 [[http://i.imgur.com/lRAA27L.png]]
 ** Installation
@@ -24,7 +25,7 @@ font-lock-mode when opened.
 If melpa won't work for you, ~M-x package-install-file~ alda-mode.el
 from this repository instead.
 
-** Usage
+** Alda Playback
    :PROPERTIES:
    :CUSTOM_ID: usage
    :END:
@@ -34,23 +35,61 @@ a section of alda code and run:
 
 ~M-x alda-play-region~
 
-This will take a while during the first call, which will start the alda
-server within Emacs (if not already on your system). ~alda~ will need to
-be on your path.
+This will take a while during the first call, which will start the alda server
+within Emacs (if not already on your system). ~alda~ will need to be on your
+path.
 
-If you want to use a custom alda binary, set ~alda-binary-location~ to
+Many other commands are available too, to allow playing an entire buffer, a
+file, or more!
+
+Please submit any bugs with this feature as issues to this repository.
+
+*** TODO BETA Alda History
+
+When playing a region, sometimes you need 'context' for the playback. In alda,
+this is provided as 'history' through the java client, through ~alda play
+--history~.
+
+# Alda mode org babel hype! (I wish)
+#+BEGIN_SRC alda
+midi-square-wave:
+    o2 c8 d e f g a b > c
+    c < b a g f e d c
+#+END_SRC
+
+If you select and play the notes, without the ~midi-square-wave:~ header, you
+will not hear any sound, as you have not selected an instrument. While you are
+composing, you probably don't want to select the entire score every time, so
+what you can do is add parts of the score you depend on to history!
+
+#+BEGIN_SRC alda
+midi-square-wave: # Highlight, and run 'alda-history-append-region'
+    o2 c8 d e f g a b > c
+    # now you can debug the notes on this line, without waiting for the line above
+    c < b a g f e d c
+#+END_SRC
+
+If you wish to clear your history and return to a blank slate, run
+~alda-history-clear~. This can be useful for debugging issues in ~alda-mode~,
+and can speed up alda execution if you added a lot to the history.
+
+In previous releases, when the history was included in alda by default, history
+was applied for every command. This is not supported in ~alda-mode~ yet, but if
+you are interested, let me know!
+
+*** Custom Alda Binary
+
+If you want to use a custom ~alda~ binary, set ~alda-binary-location~ to
 your alda binary. Ex:
 ~(setq alda-binary-location "/usr/local/bin/alda")~
 
 Keep in mind, the server will only see the selection you make, and this
 has consequences. For example, you must run a snippet of code defining
 an instrument before you hear anything (or defining a marker before
-using it). ~alda-play-region~ will use a running alda server if it finds
+using it). ~alda-play-region~ will use a running ~alda~ server if it finds
 one, but will start one within Emacs if not found. Support is currently
 only tested under Linux for this command. Mac will probably work depending
 on your emacs install.
-
-Please submit any bugs with this feature as issues to this repository.
 
 ** Evil Integration
    :PROPERTIES:
@@ -102,7 +141,7 @@ operator to do the same thing! (~gpp~ will play the current line,
    :CUSTOM_ID: contributing
    :END:
 
-If you find a bug or want to improve alda-mode, submit a PR! ~=)~
+If you find a bug or want to improve alda-mode, submit a PR or file an issue! ~=)~
 
 ** License
    :PROPERTIES:
