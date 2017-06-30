@@ -1,4 +1,16 @@
 
+* 0.2.0 (UNRELEASED)
+- WARNING: ~alda-stop~ has been renamed to ~alda down~ for consistency with the ~alda~ command line.
+- Fix windows support
+- Add support for alda history
+  - ~alda-history-clear~
+  - ~alda-history-append-region~
+  - ~alda-history-append-buffer~
+  - ~alda-history-append-block~
+  - ~alda-history-append-line~
+- New ~evil~ operator: ~alda-evil-history-append-region~
+- Add support for stopping playback via ~alda-stop~
+- Add dedicated CI and unit tests!
 * 0.1.0
 - Initial Frozen Release
 - Tested with ~alda 1.0.0-rc56~
