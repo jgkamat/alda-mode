@@ -102,6 +102,10 @@ This does include any history you might have added.
 ARGUMENT TEXT The text to play with the current alda server."
   (alda-run-cmd "play" "--history" *alda-history* "--code" text))
 
+(defun alda-stop ()
+  "Stop current alda playback."
+  (alda-run-cmd "stop"))
+
 (defun alda-play-file ()
   "Plays the current buffer's file in alda.
 This does not include any history that you may have added"
@@ -182,7 +186,8 @@ Argument END The end of the selection to play from."
   (interactive "<R><x><y>")
   (alda-history-append-region beg end))
 
-(defun alda-stop ()
+;; Renamed stop -> down for consistency
+(defun alda-down ()
   "Stops songs from playing, and cleans up idle alda runner processes.
 Because alda runs in the background, the only way to do this is with alda restart as of now."
   (interactive)

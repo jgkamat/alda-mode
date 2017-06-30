@@ -43,18 +43,24 @@ e f g")
     (alda-play-text "guitar: \"d e f\"")))
 
 (ert-deftest alda-play-file-test ()
-  "Tests if alda-play-text is working correctly."
+  "Tests if alda-play-file is working correctly."
   (with-mock
     (stub buffer-file-name => "hello-world.alda")
     (mock-alda-cmd "play" "--file" "hello-world.alda")
     (alda-play-file)))
 
 (ert-deftest alda-play-buffer-test ()
-  "Tests if alda-play-text is working correctly."
+  "Tests if alda-play-buffer is working correctly."
   (with-mock
     (stub buffer-string => "midi-square-wave: c d e")
     (mock-alda-cmd "play" "--history" "" "--code" "midi-square-wave: c d e")
     (alda-play-buffer)))
+
+(ert-deftest alda-stop-test ()
+  "Tests if alda-stop is working."
+  (with-mock
+    (mock-alda-cmd "stop")
+    (alda-stop)))
 
 (provide 'alda-mode-test)
 
