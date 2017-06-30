@@ -2,18 +2,31 @@
 defaults: &defaults
   working_directory: ~/alda-mode
   steps:
-    - run: curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
+    - run:
+        name: Install Cask
+        command: curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python
     - checkout
-    - run: ~/.cask/bin/cask install
-    - run: ~/.cask/bin/cask exec ert-runner
+    - run:
+        name: Install Cask Deps
+        command: ~/.cask/bin/cask install
+    - run:
+        name: Run Tests
+        command: ~/.cask/bin/cask exec ert-runner
 
 version: 2
 jobs:
+  emacs-25-2:
+    <<: *defaults
+    docker:
+      - image: silex/emacs:25.2
   emacs-25-1:
     <<: *defaults
     docker:
       - image: silex/emacs:25.1
-
+  emacs-24-5:
+    <<: *defaults
+    docker:
+      - image: silex/emacs:24.5
   emacs-24-3:
     <<: *defaults
     docker:
@@ -23,5 +36,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
+      - emacs-25-2
       - emacs-25-1
+      - emacs-24-5
       - emacs-24-3
