@@ -44,7 +44,8 @@ file, or more!
 
 Please submit any bugs with this feature as issues to this repository.
 
-*** TODO BETA Alda History
+*** DONE Alda History
+CLOSED: [2017-08-03 Thu 18:49]
 
 When playing a region, sometimes you need 'context' for the playback. In alda,
 this is provided as 'history' through the java client, through ~alda play
@@ -52,9 +53,9 @@ this is provided as 'history' through the java client, through ~alda play
 
 # Alda mode org babel hype! (I wish)
 #+BEGIN_SRC alda
-midi-square-wave:
-    o2 c8 d e f g a b > c
-    c < b a g f e d c
+  midi-square-wave:
+      o2 c8 d e f g a b > c
+      c < b a g f e d c
 #+END_SRC
 
 If you select and play the notes, without the ~midi-square-wave:~ header, you
@@ -63,10 +64,10 @@ composing, you probably don't want to select the entire score every time, so
 what you can do is add parts of the score you depend on to history!
 
 #+BEGIN_SRC alda
-midi-square-wave: # Highlight, and run 'alda-history-append-region'
-    o2 c8 d e f g a b > c
-    # now you can debug the notes on this line, without waiting for the line above
-    c < b a g f e d c
+  midi-square-wave: # Highlight, and run 'alda-history-append-region'
+      o2 c8 d e f g a b > c
+      # now you can debug the notes on this line, without waiting for the line above
+      c < b a g f e d c
 #+END_SRC
 
 If you wish to clear your history and return to a blank slate, run
