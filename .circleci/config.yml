@@ -27,10 +27,6 @@ jobs:
     <<: *defaults
     docker:
       - image: silex/emacs:24.5
-  emacs-24-3:
-    <<: *defaults
-    docker:
-      - image: silex/emacs:24.3
 
 workflows:
   version: 2
@@ -39,4 +35,3 @@ workflows:
       - emacs-25-2
       - emacs-25-1
       - emacs-24-5
-      - emacs-24-3
