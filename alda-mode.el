@@ -1,7 +1,7 @@
-;;; alda-mode.el --- A simple major mode for the musical programming language Alda
+;;; alda-mode.el --- An Alda major mode -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 Jay Kamat
-;; Author: Jay Kamat <github@jgkamat.33mail.com>
+;; Copyright (C) 2016-2017 Jay Kamat
+;; Author: Jay Kamat <jaygkamat@gmail.com>
 ;; Version: 0.2.0
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
@@ -57,7 +57,7 @@ If you are experiencing problems, try clearing your history with 'alda-history-c
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
 When set to nil, will attempt to use the binary found on your $PATH.
-This must be a _full_ path to."
+This must be a _full_ path to your alda binary."
   :type 'string
   :group 'Alda)
 
