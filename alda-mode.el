@@ -1,7 +1,7 @@
-;;; alda-mode.el --- A simple major mode for the musical programming language Alda
+;;; alda-mode.el --- An Alda major mode -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016 Jay Kamat
-;; Author: Jay Kamat <github@jgkamat.33mail.com>
+;; Copyright (C) 2016-2017 Jay Kamat
+;; Author: Jay Kamat <jaygkamat@gmail.com>
 ;; Version: 0.2.0
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
@@ -57,7 +57,7 @@ If you are experiencing problems, try clearing your history with 'alda-history-c
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
 When set to nil, will attempt to use the binary found on your $PATH.
-This must be a _full_ path to."
+This must be a _full_ path to your alda binary."
   :type 'string
   :group 'Alda)
 
@@ -68,7 +68,7 @@ When set to nil, will not set any ess keybindings"
   :group 'Alda)
 
 (defun alda-location ()
-  "Return what 'alda' should be called as in the shell based on alda-binary-location or the path."
+  "Return what 'alda' should be called as in the shell based on 'alda-binary-location' or the path."
   (if alda-binary-location
     alda-binary-location
     (locate-file "alda" exec-path)))
@@ -166,19 +166,19 @@ Argument END The end of the selection to play from."
 (eval-when-compile
   (unless (require 'evil nil 'noerror)
     ;; Evil must be sourced in order to define this macro
-    (defmacro evil-define-operator (name &rest trash)
+    (defmacro evil-define-operator (name &rest _)
       ;; Define a dummy instead if not present.
       `(defun ,name () (interactive) (message "Evil was not present while compiling alda-mode. Recompile with evil installed!")))))
 
 ;; Macro will be expanded based on the above dummy/evil load
-(evil-define-operator alda-evil-play-region (beg end type register yank-hanlder)
+(evil-define-operator alda-evil-play-region (beg end _type _register _yank-hanlder)
   "Plays the text from BEG to END."
   :move-point nil
   :repeat nil
   (interactive "<R><x><y>")
   (alda-play-region beg end))
 
-(evil-define-operator alda-evil-history-append-region (beg end type register yank-hanlder)
+(evil-define-operator alda-evil-history-append-region (beg end _type _register _yank-hanlder)
   "Appends the text from BEG to END to alda history."
   :move-point nil
   :repeat nil

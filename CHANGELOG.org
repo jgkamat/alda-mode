@@ -1,4 +1,6 @@
 
+* 0.3.0 (UNRELEASED)
+- Switch to lexical binding
 * 0.2.0
 - WARNING: ~alda-stop~ has been renamed to ~alda down~ for consistency with the ~alda~ command line.
 - Fix windows support
