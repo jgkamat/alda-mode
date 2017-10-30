@@ -70,10 +70,10 @@ This must be a _full_ path to your alda binary."
   :group 'Alda)
 
 (defcustom alda-interpreter "alda repl"
-  "The interpreter that `run-scala' should run. This should
- be a program in your PATH or the full pathname of the scala interpreter."
+  "The interpreter that `run-alda' should run. This should
+ be a program in your PATH or the full pathname of the alda interpreter."
   :type 'string
-  :group 'scala-mode-inf)
+  :group 'alda-mode-inf)
 
 (defconst alda-inf-buffer-name "*inferior-alda*")
 
