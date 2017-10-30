@@ -41,6 +41,8 @@
 (defconst +alda-output-name+ "alda-playback")
 (defconst +alda-comment-str+ "#")
 
+(require 'comint)
+
 ;;; Code:
 ;;;; -- Variables --
 (defvar *alda-history*
@@ -54,6 +56,12 @@ If you are experiencing problems, try clearing your history with 'alda-history-c
   "Alda customization options"
   :group 'applications)
 
+(defgroup alda-mode-inf
+  nil
+  "Mode to interact with a Alda interpreter."
+  :group 'Alda
+  :tag "Inferior Alda")
+
 (defcustom alda-binary-location nil
   "Alda binary location for `alda-mode'.
 When set to nil, will attempt to use the binary found on your $PATH.
@@ -61,7 +69,65 @@ This must be a _full_ path to your alda binary."
   :type 'string
   :group 'Alda)
 
+(defcustom alda-interpreter "alda repl"
+  "The interpreter that `run-scala' should run. This should
+ be a program in your PATH or the full pathname of the scala interpreter."
+  :type 'string
+  :group 'scala-mode-inf)
+
+(defconst alda-inf-buffer-name "*inferior-alda*")
+
+(define-derived-mode alda-mode-inf comint-mode "Inferior Alda"
+  "Major mode for interacting with a Alda interpreter.
+
+\\{inferior-alda-mode-map\\}"
+  (define-key alda-mode-inf-map [(meta return)] 'comint-accumulate)
+
+  ;; Comint configuration
+  (make-local-variable 'comint-input-sender)
+  (setq comint-input-sender 'alda-input-sender))
+
+(defun alda-input-sender (proc string)
+  (comint-send-string proc string)
+  ;; (comint-send-string proc "\nemacs:end\n")) ;; Heineman's contrib (06/03/2007)
+  (comint-send-string proc "\n"))
+
+;;;###autoload
+(defun alda-interpreter-running-p-1 ()
+  ;; True iff a Alda interpreter is currently running in a buffer.
+  (comint-check-proc alda-inf-buffer-name))
+
+(defun alda-check-interpreter-running ()
+  (unless (alda-interpreter-running-p-1)
+    (alda-run-alda alda-interpreter)))
+
+;;;###autoload
+(defun alda-run-alda (cmd-line)
+  "Run a Alda interpreter in an Emacs buffer"
+  (interactive (list (if current-prefix-arg
+			 (read-string "Alda interpreter: " alda-interpreter)
+                       alda-interpreter)))
+  (unless (alda-interpreter-running-p-1)
+    (setq alda-interpreter cmd-line)
+    (let ((cmd/args (split-string cmd-line)))
+      (set-buffer
+       (apply 'make-comint "inferior-alda" (car cmd/args) nil (cdr cmd/args))))
+    (alda-mode-inf)
+    (pop-to-buffer alda-inf-buffer-name)))
+
+(defun alda-switch-to-interpreter ()
+  "Switch to buffer containing the interpreter"
+  (interactive)
+  (alda-check-interpreter-running)
+  (switch-to-buffer-other-window alda-inf-buffer-name))
+
 (defcustom alda-ess-keymap t
+  "Whether to use ess keymap in 'alda-mode'.
+When set to nil, will not set any ess keybindings"
+  :type 'boolean
+  :group 'Alda)
+
+(defcustom alda-play-region-in-repl nil
   "Whether to use ess keymap in 'alda-mode'.
 When set to nil, will not set any ess keybindings"
   :type 'boolean
@@ -153,6 +219,13 @@ Argument END The end of the selection to append from."
   (interactive)
   (alda-history-append-region (line-beginning-position) (line-end-position)))
 
+(defun alda-eval-region (start end)
+  "Send current region to Alda interpreter."
+  (interactive "r")
+  (alda-check-interpreter-running)
+  (comint-send-region alda-inf-buffer-name start end)
+  (comint-send-string alda-inf-buffer-name "\n"))
+
 (defun alda-play-region (start end)
   "Plays the current selection in alda.
 Argument START The start of the selection to play from.
@@ -160,7 +233,9 @@ Argument END The end of the selection to play from."
   (interactive "r")
   (if (eq start end)
     (message "No mark was set!")
-    (alda-play-text (buffer-substring-no-properties start end))))
+    (if alda-play-region-in-repl
+      (alda-eval-region start end)
+      (alda-play-text (buffer-substring-no-properties start end)))))
 
 ;; If evil is found, make evil commands as well.
 (eval-when-compile
@@ -317,10 +392,12 @@ Because alda runs in the background, the only way to do this is with alda restar
 
   ;; Add alda-ess-keymap if requested
   (when alda-ess-keymap
+    (define-key alda-mode-map "\C-c\C-i" 'alda-run-alda)
     (define-key alda-mode-map "\C-c\C-r" 'alda-play-region)
     (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
     (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
-    (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer)))
+    (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer)
+    (define-key alda-mode-map "\C-c\C-z" 'alda-switch-to-interpreter)))
 
 
 ;;;; -- Alda Mode Definition --
