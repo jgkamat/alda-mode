@@ -128,8 +128,8 @@ When set to nil, will not set any ess keybindings"
   :group 'Alda)
 
 (defcustom alda-play-region-in-repl nil
-  "Whether to use ess keymap in 'alda-mode'.
-When set to nil, will not set any ess keybindings"
+  "Whether to send alda code region to repl in 'alda-mode'.
+When set to nil, will not set to repl"
   :type 'boolean
   :group 'Alda)
 
