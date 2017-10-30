@@ -196,38 +196,34 @@ Because alda runs in the background, the only way to do this is with alda restar
 ;;;; -- Font Lock Regexes --
 (let
   ;; Prevent regexes from taking up memory
-  ((alda-comment-regexp "\\(#.*$\\)\\|\\(?1:(comment\\_>\\)")
-    (alda-instrument-regexp "\\([a-zA-Z]\\{2\\}[A-Za-z0-9_\-]*\\)\\(\s*\\(\"[A-Za-z0-9_\-]*\"\\)\\)?:")
-    (alda-voice-regexp "\\([Vv][0-9]+\\):")
-    (alda-string-regexp "“\\([^ ]+?\\)”")
-    (alda-timing-regexp "[a-gA-GrR][\s+-]*\\([~.0-9\s/]*\\(m?s\\)?\\)")
-    (alda-repeating-regexp "\\(\\*[0-9]+\\)")
-    (alda-cramming-regexp "\\({\\|}\\)")
-    (alda-grouping-regexp "\\(\\[\\|\\]\\)")
-    (alda-accidental-regexp "\\([a-gA-GrR]\s*[-+]+\\)")
-    (alda-bar-regexp "\\(|\\)")
-    (alda-set-octave-regexp "\\(o[0-9]+\\)")
-    (alda-shift-octave-regexp "\\(>\\|<\\)")
-    (alda-variable-regexp "\\(([a-zA-Z-]+!?\s+\\(\\([0-9]+\\)\\|\\(\\[\\(:[a-zA-Z]+\s?\\)+\\]\\)\\))\\)")
-    (alda-markers-regexp "\\([@%][a-zA-Z]\\{2\\}[a-zA-Z0-9()+-]*\\)"))
+  ((alda-instrument-regexp "\\([a-zA-Z]\\{2\\}[A-Za-z0-9_\-]*\\)\\(\s*\\(\"[A-Za-z0-9_\-]*\"\\)\\)?:")
+   (alda-voice-regexp "\\([Vv][0-9]+\\):")
+   (alda-timing-regexp "[a-gA-GrR][\s+-]*\\([~.0-9\s/]*\\(m?s\\)?\\)")
+   (alda-repeating-regexp "\\(\\*[0-9]+\\)")
+   (alda-cramming-regexp "\\({\\|}\\)")
+   (alda-grouping-regexp "\\(\\[\\|\\]\\)")
+   (alda-accidental-regexp "\\([a-gA-GrR]\s*[-+]+\\)")
+   (alda-bar-regexp "\\(|\\)")
+   (alda-set-octave-regexp "\\(o[0-9]+\\)")
+   (alda-shift-octave-regexp "\\(>\\|<\\)")
+   (alda-variable-regexp "\\(([a-zA-Z-]+!?\s+\\(\\([0-9]+\\)\\|\\(\\[\\(:[a-zA-Z]+\s?\\)+\\]\\)\\))\\)")
+   (alda-markers-regexp "\\([@%][a-zA-Z]\\{2\\}[a-zA-Z0-9()+-]*\\)"))
 
   (defvar alda-highlights nil
     "Font lock highlights for 'alda-mode'")
   (setq alda-highlights
-    `((,alda-comment-regexp . (1 font-lock-comment-face))
-       (,alda-bar-regexp . (1 font-lock-comment-face))
-       (,alda-voice-regexp . (1 font-lock-function-name-face))
-       (,alda-instrument-regexp . (1 font-lock-type-face))
-       (,alda-string-regexp . (1 font-lock-string-face))
-       (,alda-variable-regexp . (1 font-lock-variable-name-face))
-       (,alda-set-octave-regexp . (1 font-lock-constant-face))
-       (,alda-shift-octave-regexp . (1 font-lock-constant-face))
-       (,alda-markers-regexp . (1 font-lock-builtin-face))
-       (,alda-timing-regexp . (1 font-lock-builtin-face))
-       (,alda-repeating-regexp . (1 font-lock-builtin-face))
-       (,alda-cramming-regexp . (1 font-lock-builtin-face))
-       (,alda-grouping-regexp . (1 font-lock-builtin-face))
-       (,alda-accidental-regexp . (1 font-lock-preprocessor-face)))))
+    `((,alda-bar-regexp . (1 font-lock-comment-face))
+      (,alda-voice-regexp . (1 font-lock-function-name-face))
+      (,alda-instrument-regexp . (1 font-lock-type-face))
+      (,alda-variable-regexp . (1 font-lock-variable-name-face))
+      (,alda-set-octave-regexp . (1 font-lock-constant-face))
+      (,alda-shift-octave-regexp . (1 font-lock-constant-face))
+      (,alda-markers-regexp . (1 font-lock-builtin-face))
+      (,alda-timing-regexp . (1 font-lock-builtin-face))
+      (,alda-repeating-regexp . (1 font-lock-builtin-face))
+      (,alda-cramming-regexp . (1 font-lock-builtin-face))
+      (,alda-grouping-regexp . (1 font-lock-builtin-face))
+      (,alda-accidental-regexp . (1 font-lock-preprocessor-face)))))
 
 ;;;; -- Indention code --
 
@@ -321,6 +317,14 @@ Because alda runs in the background, the only way to do this is with alda restar
     (define-key alda-mode-map "\C-c\C-c" 'alda-play-block)
     (define-key alda-mode-map "\C-c\C-n" 'alda-play-line)
     (define-key alda-mode-map "\C-c\C-b" 'alda-play-buffer)))
+
+;;;; -- Alda Syntax Table --
+
+(defvar alda-mode-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?# "<" table)
+    (modify-syntax-entry ?\n ">" table)
+    table))
 
 
 ;;;; -- Alda Mode Definition --
