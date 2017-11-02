@@ -92,7 +92,7 @@ This must be a _full_ path to your alda binary."
   ;; True iff a Alda interpreter is currently running in a buffer.
   (comint-check-proc alda-inf-buffer-name))
 
-(defun alda-check-interpreter-running ()
+(defun alda-check-or-start-interpreter ()
   (unless (alda-interpreter-running-p-1)
     (alda-run-alda (alda-repl))))
 
@@ -109,22 +109,21 @@ This must be a _full_ path to your alda binary."
 ;;;###autoload
 (defun alda-run-alda (cmd-line)
   "Run a Alda interpreter in an Emacs buffer"
-  (let (alda-interpreter (alda-repl))
+  (let* ((alda-interpreter cmd-line)
+         (cmd/args (split-string cmd-line)))
     (interactive (list (if current-prefix-arg
                          (read-string "Alda interpreter: " alda-interpreter)
                          alda-interpreter)))
     (unless (alda-interpreter-running-p-1)
-      (setq alda-interpreter cmd-line)
-      (let ((cmd/args (split-string cmd-line)))
-        (set-buffer
-          (apply 'make-comint "inferior-alda" (car cmd/args) nil (cdr cmd/args))))
+      (set-buffer
+        (apply 'make-comint "inferior-alda" (car cmd/args) nil (cdr cmd/args)))
       (alda-mode-inf)
       (pop-to-buffer alda-inf-buffer-name))))
 
 (defun alda-switch-to-interpreter ()
   "Switch to buffer containing the interpreter"
   (interactive)
-  (alda-check-interpreter-running)
+  (alda-check-or-start-interpreter)
   (switch-to-buffer-other-window alda-inf-buffer-name))
 
 (defcustom alda-ess-keymap t
@@ -219,10 +218,10 @@ Argument END The end of the selection to append from."
   (interactive)
   (alda-history-append-region (line-beginning-position) (line-end-position)))
 
-(defun alda-eval-region (start end)
+(defun alda-inf-eval-region (start end)
   "Send current region to Alda interpreter."
   (interactive "r")
-  (alda-check-interpreter-running)
+  (alda-check-or-start-interpreter)
   (comint-send-region alda-inf-buffer-name start end)
   (comint-send-string alda-inf-buffer-name "\n"))
 
@@ -234,7 +233,7 @@ Argument END The end of the selection to play from."
   (if (eq start end)
     (message "No mark was set!")
     (if alda-play-region-in-repl
-      (alda-eval-region start end)
+      (alda-inf-eval-region start end)
       (alda-play-text (buffer-substring-no-properties start end)))))
 
 ;; If evil is found, make evil commands as well.
