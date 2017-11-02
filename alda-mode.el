@@ -69,11 +69,7 @@ This must be a _full_ path to your alda binary."
   :type 'string
   :group 'Alda)
 
-(defcustom alda-interpreter "alda repl"
-  "The interpreter that `run-alda' should run. This should
- be a program in your PATH or the full pathname of the alda interpreter."
-  :type 'string
-  :group 'alda-mode-inf)
+;;;; -- Alda inferior process definitions --
 
 (defconst alda-inf-buffer-name "*inferior-alda*")
 
@@ -89,7 +85,6 @@ This must be a _full_ path to your alda binary."
 
 (defun alda-input-sender (proc string)
   (comint-send-string proc string)
-  ;; (comint-send-string proc "\nemacs:end\n")) ;; Heineman's contrib (06/03/2007)
   (comint-send-string proc "\n"))
 
 ;;;###autoload
@@ -99,21 +94,32 @@ This must be a _full_ path to your alda binary."
 
 (defun alda-check-interpreter-running ()
   (unless (alda-interpreter-running-p-1)
-    (alda-run-alda alda-interpreter)))
+    (alda-run-alda (alda-repl))))
+
+(defun alda-location ()
+  "Return what 'alda' should be called as in the shell based on 'alda-binary-location' or the path."
+  (if alda-binary-location
+    alda-binary-location
+    (locate-file "alda" exec-path)))
+
+(defun alda-repl ()
+  "Return the 'alda' repl start command"
+  (format "%s repl" (alda-location)))
 
 ;;;###autoload
 (defun alda-run-alda (cmd-line)
   "Run a Alda interpreter in an Emacs buffer"
-  (interactive (list (if current-prefix-arg
-			 (read-string "Alda interpreter: " alda-interpreter)
-                       alda-interpreter)))
-  (unless (alda-interpreter-running-p-1)
-    (setq alda-interpreter cmd-line)
-    (let ((cmd/args (split-string cmd-line)))
-      (set-buffer
-       (apply 'make-comint "inferior-alda" (car cmd/args) nil (cdr cmd/args))))
-    (alda-mode-inf)
-    (pop-to-buffer alda-inf-buffer-name)))
+  (let (alda-interpreter (alda-repl))
+    (interactive (list (if current-prefix-arg
+                         (read-string "Alda interpreter: " alda-interpreter)
+                         alda-interpreter)))
+    (unless (alda-interpreter-running-p-1)
+      (setq alda-interpreter cmd-line)
+      (let ((cmd/args (split-string cmd-line)))
+        (set-buffer
+          (apply 'make-comint "inferior-alda" (car cmd/args) nil (cdr cmd/args))))
+      (alda-mode-inf)
+      (pop-to-buffer alda-inf-buffer-name))))
 
 (defun alda-switch-to-interpreter ()
   "Switch to buffer containing the interpreter"
@@ -132,12 +138,6 @@ When set to nil, will not set any ess keybindings"
 When set to nil, will not set any ess keybindings"
   :type 'boolean
   :group 'Alda)
-
-(defun alda-location ()
-  "Return what 'alda' should be called as in the shell based on 'alda-binary-location' or the path."
-  (if alda-binary-location
-    alda-binary-location
-    (locate-file "alda" exec-path)))
 
 (defun alda-server ()
   "Start an alda server in an Emacs process."
