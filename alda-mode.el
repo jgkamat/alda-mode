@@ -87,14 +87,13 @@ This must be a _full_ path to your alda binary."
   (comint-send-string proc string)
   (comint-send-string proc "\n"))
 
-;;;###autoload
 (defun alda-interpreter-running-p-1 ()
   ;; True iff a Alda interpreter is currently running in a buffer.
   (comint-check-proc alda-inf-buffer-name))
 
 (defun alda-check-or-start-interpreter ()
   (unless (alda-interpreter-running-p-1)
-    (alda-run-alda (alda-repl))))
+    (alda-run-alda)))
 
 (defun alda-location ()
   "Return what 'alda' should be called as in the shell based on 'alda-binary-location' or the path."
@@ -106,14 +105,12 @@ This must be a _full_ path to your alda binary."
   "Return the 'alda' repl start command"
   (format "%s repl" (alda-location)))
 
-;;;###autoload
-(defun alda-run-alda (cmd-line)
+(defun alda-run-alda ()
   "Run a Alda interpreter in an Emacs buffer"
-  (let* ((alda-interpreter cmd-line)
-         (cmd/args (split-string cmd-line)))
-    (interactive (list (if current-prefix-arg
-                         (read-string "Alda interpreter: " alda-interpreter)
-                         alda-interpreter)))
+  (interactive)
+  (let* ((cmd-line (alda-repl))
+          (alda-interpreter cmd-line)
+          (cmd/args (split-string cmd-line)))
     (unless (alda-interpreter-running-p-1)
       (set-buffer
         (apply 'make-comint "inferior-alda" (car cmd/args) nil (cdr cmd/args)))
