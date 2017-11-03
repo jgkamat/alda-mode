@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016-2017 Jay Kamat
 ;; Author: Jay Kamat <jaygkamat@gmail.com>
-;; Version: 0.2.0
+;; Version: 0.3.0
 ;; Keywords: alda, highlight
 ;; URL: http://github.com/jgkamat/alda-mode
 ;; Package-Requires: ((emacs "24.0"))
@@ -23,7 +23,6 @@
 ;;; Commentary:
 ;; This package provides syntax highlighting and basic alda integration.
 ;; Activate font-lock-mode to use the syntax features, and run 'alda-play-region' to play song files
-;;
 ;;
 ;; Variables:
 ;; alda-binary-location: Set to the location of the binary executable.

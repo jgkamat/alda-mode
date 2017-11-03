@@ -1,6 +1,12 @@
 
 * 0.3.0 (UNRELEASED)
 - Switch to lexical binding
+- Add support for an alda inferior process via ~alda-repl~ (thanks @tninja)
+  - ~alda-run-alda~ now starts an alda repl in an inferior process
+  - ~alda-inf-eval-region~ will evaluate a region in the inferior process
+  - ~alda-play-region-in-repl~ will redirect all region commands into the
+    inferior process
+  - New dependency on ~comint~
 * 0.2.0
 - WARNING: ~alda-stop~ has been renamed to ~alda down~ for consistency with the ~alda~ command line.
 - Fix windows support
